@@ -1,0 +1,10 @@
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionConfigServices\bin\Debug\netstandard2.0\JancsiVisionConfigServices.deps.json
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionConfigServices\bin\Debug\netstandard2.0\JancsiVisionConfigServices.dll
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionConfigServices\bin\Debug\netstandard2.0\JancsiVisionConfigServices.pdb
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionConfigServices\obj\Debug\netstandard2.0\JancsiVisionConfigServices.csproj.AssemblyReference.cache
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionConfigServices\obj\Debug\netstandard2.0\JancsiVisionConfigServices.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionConfigServices\obj\Debug\netstandard2.0\JancsiVisionConfigServices.AssemblyInfoInputs.cache
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionConfigServices\obj\Debug\netstandard2.0\JancsiVisionConfigServices.AssemblyInfo.cs
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionConfigServices\obj\Debug\netstandard2.0\JancsiVisionConfigServices.csproj.CoreCompileInputs.cache
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionConfigServices\obj\Debug\netstandard2.0\JancsiVisionConfigServices.dll
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionConfigServices\obj\Debug\netstandard2.0\JancsiVisionConfigServices.pdb

@@ -1,0 +1,3 @@
+C:\Users\EvanQ\source\repos\testCameraSDK\testCameraSDK\obj\Debug\testCameraSDK.csproj.AssemblyReference.cache
+C:\Users\EvanQ\source\repos\testCameraSDK\testCameraSDK\obj\Debug\testCameraSDK.csproj.SuggestedBindingRedirects.cache
+C:\Users\EvanQ\source\repos\testCameraSDK\testCameraSDK\obj\Debug\testCameraSDK.csproj.CoreCompileInputs.cache

@@ -1,0 +1,10 @@
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionPointCloudServers\bin\Debug\netstandard2.0\JancsiVisionPointCloudServers.deps.json
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionPointCloudServers\bin\Debug\netstandard2.0\JancsiVisionPointCloudServers.dll
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionPointCloudServers\bin\Debug\netstandard2.0\JancsiVisionPointCloudServers.pdb
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionPointCloudServers\obj\Debug\netstandard2.0\JancsiVisionPointCloudServers.csproj.AssemblyReference.cache
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionPointCloudServers\obj\Debug\netstandard2.0\JancsiVisionPointCloudServers.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionPointCloudServers\obj\Debug\netstandard2.0\JancsiVisionPointCloudServers.AssemblyInfoInputs.cache
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionPointCloudServers\obj\Debug\netstandard2.0\JancsiVisionPointCloudServers.AssemblyInfo.cs
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionPointCloudServers\obj\Debug\netstandard2.0\JancsiVisionPointCloudServers.csproj.CoreCompileInputs.cache
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionPointCloudServers\obj\Debug\netstandard2.0\JancsiVisionPointCloudServers.dll
+C:\Users\EvanQ\source\repos\testCameraSDK\JancsiVisionPointCloudServers\obj\Debug\netstandard2.0\JancsiVisionPointCloudServers.pdb

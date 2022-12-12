@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="pythonnet_py39_win" Version="2.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JancsiVisionCameraServers\JancsiVisionCameraServers.csproj" />
+    <ProjectReference Include="..\JancsiVisionConfigServices\JancsiVisionConfigServices.csproj" />
+    <ProjectReference Include="..\JancsiVisionLogServers\JancsiVisionLogServers.csproj" />
+    <ProjectReference Include="..\JancsiVisionPointCloudServers\JancsiVisionPointCloudServers.csproj" />
+  </ItemGroup>
+
+</Project>
