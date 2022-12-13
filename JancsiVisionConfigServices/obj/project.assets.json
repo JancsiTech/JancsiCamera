@@ -185,11 +185,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj",
+      "projectUniqueName": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj",
       "projectName": "JancsiVisionConfigServices",
-      "projectPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj",
+      "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj",
       "packagesPath": "C:\\Users\\EvanQ\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionConfigServices\\obj\\",
+      "outputPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionConfigServices\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\EvanQ\\AppData\\Roaming\\NuGet\\NuGet.Config",

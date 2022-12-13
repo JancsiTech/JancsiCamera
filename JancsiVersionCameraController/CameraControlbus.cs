@@ -2,8 +2,10 @@
 using JancsiVersionCameraController;
 using JancsiVisionCameraServers;
 using JancsiVisionCameraServers.Interfaces;
+using JancsiVisionCameraServers.Model;
 using JancsiVisionConfigServices;
 using JancsiVisionLogServers;
+using JancsiVisionPointCloudServers.Model;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,30 +15,20 @@ namespace JancsiVisionCameraController
 {
     public class CameraControlbus
     {
-
+        public ICameraControlServer cameraControl;
         /// <summary>
         /// 依赖注入方式执行相机获取
         /// </summary>
         public void initData()
         {
-
-            ////并行执行相机参数配置，和点云获取
-            // foreach (ICogFrameGrabber icogGrabber in cameras)
-            // {
-
-            //     CongexCameraServer cogCamera = new CongexCameraServer(icogGrabber);
-
-            // }
-
-
             ServiceCollection services = new ServiceCollection();
 
             services.AddSingleton<ILogProvider, ConsoleLogProvider>();
             services.AddSingleton<ICameraControlServer, CognexCameraControl>();
             using (ServiceProvider sp = services.BuildServiceProvider())
             {
-                var cameraInit = sp.GetRequiredService<ICameraControlServer>();
-                cameraInit.init();
+                cameraControl = sp.GetRequiredService<ICameraControlServer>();
+                cameraControl.init();
 
                 Console.WriteLine("等操作结束");
                 Console.ReadLine();
@@ -46,5 +38,19 @@ namespace JancsiVisionCameraController
 
 
         }
+        /// <summary>
+        /// 开始获取
+        /// </summary>
+        public Dictionary<Dto_CameraOperation, Dto_PointCloud> StartTrige()
+        {
+            Dictionary<Dto_CameraOperation, Dto_PointCloud> dicPin = new Dictionary<Dto_CameraOperation, Dto_PointCloud>();
+
+            if (this.cameraControl != null)
+            {
+                dicPin = cameraControl.triggerCapture();
+            }
+            return dicPin;
+        }
+
     }
 }

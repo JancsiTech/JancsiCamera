@@ -91,6 +91,18 @@
       <Project>{0b37d963-6166-42ad-a2f6-ee916bdeaecf}</Project>
       <Name>JancsiVisionCameraController</Name>
     </ProjectReference>
+    <ProjectReference Include="..\JancsiVisionCameraServers\JancsiVisionCameraServers.csproj">
+      <Project>{5da9a966-e3cd-4f1a-8934-7d3dc2632475}</Project>
+      <Name>JancsiVisionCameraServers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JancsiVisionPointCloudServers\JancsiVisionPointCloudServers.csproj">
+      <Project>{71F44809-54B6-480B-896E-B34979BB73B1}</Project>
+      <Name>JancsiVisionPointCloudServers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JancsiVisionUtilityServers\JancsiVisionUtilityServers.csproj">
+      <Project>{a9d14cc8-aae9-4ace-860b-5a6b235f29c3}</Project>
+      <Name>JancsiVisionUtilityServers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

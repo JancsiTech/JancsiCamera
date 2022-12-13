@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gAbfBWchluf8SqURKeiaOXeoj18LtpA/cI5jLXeR1WCJ77hXiu+62qfVecewmBXqUoFt8Q4OcIrE3Q+ihfbtIw==",
+  "dgSpecHash": "urSdVTQLW6JLEL96f1GKiN9a5WmBrLMl2e6D1daTPAPacZ/VuLlXf1KKYL+xXHMW1en0nZqlYerBtbxJqWetpw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionUtilityServers\\JancsiVisionUtilityServers.csproj",
+  "projectFilePath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionUtilityServers\\JancsiVisionUtilityServers.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\EvanQ\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\EvanQ\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

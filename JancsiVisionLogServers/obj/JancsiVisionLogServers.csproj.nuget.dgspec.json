@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj": {}
+    "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj": {}
   },
   "projects": {
-    "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj": {
+    "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj",
+        "projectUniqueName": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj",
         "projectName": "JancsiVisionLogServers",
-        "projectPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj",
+        "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj",
         "packagesPath": "C:\\Users\\EvanQ\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionLogServers\\obj\\",
+        "outputPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionLogServers\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\EvanQ\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ahiux1+sJichh/1+PzNOld/SodS37Tf3Jfy/qMJVsZHAWhpYAuybE/zeL6SxRRXqFhDoMXy1wihNZ9wjzuph/g==",
+  "dgSpecHash": "zHYiyky32+ItJxbfu6UXXGyK7eaktVo9vsiWwZEZdon5URjvSZXthnQg/7jCUhyn+JR6u2kG+Bh6Y/irRfSt+Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj",
+  "projectFilePath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\EvanQ\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\EvanQ\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"

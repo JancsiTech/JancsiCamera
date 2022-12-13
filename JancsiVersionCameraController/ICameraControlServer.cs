@@ -1,9 +1,11 @@
-﻿using JancsiVisionCameraServers.Model;
+﻿using JancsiVisionCameraServers;
+using JancsiVisionCameraServers.Model;
 using JancsiVisionPointCloudServers.Model;
 using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Windows.Media.Media3D;
 
 namespace JancsiVisionCameraController
 {

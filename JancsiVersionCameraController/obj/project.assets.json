@@ -531,11 +531,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVersionCameraController\\JancsiVisionCameraController.csproj",
+      "projectUniqueName": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVersionCameraController\\JancsiVisionCameraController.csproj",
       "projectName": "JancsiVisionCameraController",
-      "projectPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVersionCameraController\\JancsiVisionCameraController.csproj",
+      "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVersionCameraController\\JancsiVisionCameraController.csproj",
       "packagesPath": "C:\\Users\\EvanQ\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVersionCameraController\\obj\\",
+      "outputPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVersionCameraController\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\EvanQ\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -552,17 +552,17 @@
         "netstandard2.0": {
           "targetAlias": "netstandard2.0",
           "projectReferences": {
-            "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionCameraServers\\JancsiVisionCameraServers.csproj": {
-              "projectPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionCameraServers\\JancsiVisionCameraServers.csproj"
+            "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionCameraServers\\JancsiVisionCameraServers.csproj": {
+              "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionCameraServers\\JancsiVisionCameraServers.csproj"
             },
-            "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj": {
-              "projectPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj"
+            "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj": {
+              "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj"
             },
-            "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj": {
-              "projectPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj"
+            "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj": {
+              "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj"
             },
-            "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj": {
-              "projectPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj"
+            "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj": {
+              "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj"
             }
           }
         }

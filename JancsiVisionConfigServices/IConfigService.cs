@@ -6,7 +6,6 @@ namespace JancsiVisionConfigServices
     {
          string GetCameraConfig(string name);
 
-
          string GetEnvironmentConfig(string name);
     }
 }

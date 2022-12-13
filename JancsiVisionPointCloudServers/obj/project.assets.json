@@ -185,11 +185,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj",
+      "projectUniqueName": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj",
       "projectName": "JancsiVisionPointCloudServers",
-      "projectPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj",
+      "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj",
       "packagesPath": "C:\\Users\\EvanQ\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionPointCloudServers\\obj\\",
+      "outputPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\EvanQ\\AppData\\Roaming\\NuGet\\NuGet.Config",

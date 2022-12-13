@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Media.Media3D;
 using JancsiVisionCameraServers.Model;
 using JancsiVisionPointCloudServers.Model;
 
@@ -25,7 +26,7 @@ namespace JancsiVisionCameraServers.Interfaces
         /// </summary>
         /// <returns></returns>
         //# try to connect
-        Dto_PointCloud connect();
+        Dictionary<Dto_CameraOperation, List<Point3D>> connect();
 
         /// <summary>
         /// 断开链接

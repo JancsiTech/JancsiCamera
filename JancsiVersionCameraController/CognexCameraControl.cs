@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 
 namespace JancsiVersionCameraController
 {
@@ -40,6 +41,7 @@ namespace JancsiVersionCameraController
 
             return cameras;
         }
+
         //private static ConcurrentDictionary<int, string> Dic = new ConcurrentDictionary<int, string>();
         //# getOneFrame 
         //
@@ -62,9 +64,6 @@ namespace JancsiVersionCameraController
 
                     //Task.WaitAll(TaskList.ToArray());
 
-
-
-
                     // Await when all to get an array of result sets after all of then have finished
                     //var results = await Task.WhenAll(
                     //    Task.Run(() => Method1()), // Note that this leaves room for parameters to Method1...
@@ -75,16 +74,24 @@ namespace JancsiVersionCameraController
                     // Simply select many over the result sets to get each result
                     //return results.SelectMany(r => r);
                     //并行开启获取点云服务
-                    ConcurrentBag<Dto_PointCloud> resultCollection = new ConcurrentBag<Dto_PointCloud>();
+                    ConcurrentBag<Dictionary<Dto_CameraOperation, List<Point3D>>> resultCollection = new ConcurrentBag<Dictionary<Dto_CameraOperation, List<Point3D>>>();
+
                     cameras.AsParallel().ForAll(p =>
                     {
                         resultCollection.Add(p.connect());
+
                     });
                     //获取结束
-                    //
-                    if (resultCollection.Count!=0&&resultCollection.Count==cameras.Count)
+                    if (resultCollection.Count != 0 && resultCollection.Count == cameras.Count)
                     {
+                        //dicCamera
+                        foreach (var resluts in resultCollection)
+                        {
+                            Dto_PointCloud dto_PointCloud = new Dto_PointCloud();
+                            dto_PointCloud.point3Ds = resluts.First().Value;
 
+                            dicCamera[resluts.First().Key] = dto_PointCloud;
+                        }
                     }
                     else
                     {
@@ -118,7 +125,8 @@ namespace JancsiVersionCameraController
                 //获取相机
                 //  CogFrameGrabberGigEs mframe = new CogFrameGrabberGigEs();
                 // Enumerates available ICogFrameGrabber objects.
-                CogFrameGrabbers frameGrabbers = new CogFrameGrabbers();
+                //CogFrameGrabbers frameGrabbers = new CogFrameGrabbers();
+                CogFrameGrabberImagingDevices frameGrabbers = new CogFrameGrabberImagingDevices();
                 if (frameGrabbers.Count < 1)
                 {
                     _ErrorMessage = "没有找到相机设备！";
@@ -147,8 +155,8 @@ namespace JancsiVersionCameraController
                         //这里扬奇逻辑根据postion 和 0，1，2做对照
                         congexCamera._CameraOperation.uuid = index;
                         //获取相机IP地址
-                        //主机IP:foundFrameGrabber.OwnedGigEAccess.HostIPAddress;
-                        congexCamera._CameraOperation.Ip = foundFrameGrabber.OwnedGigEAccess.CurrentIPAddress;
+                        //主机IP:foundFrameGrabber.OwnedGigEAccess.HostIPAddress;  
+                        // congexCamera._CameraOperation.Ip = foundFrameGrabber.OwnedGigEAccess.CurrentIPAddress;
                         //配置中获取相机对照  ToDo...
                         congexCamera._CameraOperation.cameraId = index;
 
@@ -177,7 +185,18 @@ namespace JancsiVersionCameraController
                         congexCamera._CameraOperation.calibrateTime = null;
 
                         // Create an AcqFifo.
-                        congexCamera._MainCogFifo = foundFrameGrabber.CreateAcqFifo(foundFrameGrabber.AvailableVideoFormats[0], CogAcqFifoPixelFormatConstants.Format16Grey, 0, true);
+                        //congexCamera._MainCogFifo = foundFrameGrabber.CreateAcqFifo(foundFrameGrabber.AvailableVideoFormats[0], CogAcqFifoPixelFormatConstants.Format16Grey, 0, true);
+                        // the pixel format is ignore here for the aik
+                        congexCamera._MainCogFifo = foundFrameGrabber.CreateAcqFifo("Cognex NullFormat", CogAcqFifoPixelFormatConstants.Format8Grey, 0, true);
+                        // Create an AcqFifo.
+                        // congexCamera._MainCogFifo = foundFrameGrabber.CreateAcqFifo(foundFrameGrabber.AvailableVideoFormats[0], CogAcqFifoPixelFormatConstants.Format16Grey, 0, true);
+
+                        //congexCamera.setCameraConfig();
+
+                        congexCamera.setCameraConfig();
+
+                        //congexCamera._MainCogFifo.Complete += new CogCompleteEventHandler(congexCamera.FIFO_Complete);
+
                         cameras.Add(congexCamera);
 
                         index++;
@@ -191,6 +210,20 @@ namespace JancsiVersionCameraController
                         return;
                     }
                 }
+                //初始化返回结构
+                if (cameras != null && cameras.Count > 0)
+                {
+                    foreach (CongexCameraServer devce in cameras)
+                    {
+                        dicCamera = new Dictionary<Dto_CameraOperation, Dto_PointCloud>();
+                        if (!dicCamera.Keys.Contains(devce._CameraOperation))
+                        {
+                            dicCamera.Add(devce._CameraOperation, new Dto_PointCloud());
+                        }
+                    }
+                }
+
+
                 //log camera connect end
             }
             catch (Exception ex)

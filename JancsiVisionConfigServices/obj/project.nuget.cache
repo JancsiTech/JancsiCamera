@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "uGSxaW2iJw+Ogu/ssGqPbQW+ZcnQH9KJRHHNPRQECVg+/hnkXh5ycbHOsxLDfdwSyVE3f5LgyAZQMRpzhWFGQQ==",
+  "dgSpecHash": "Z+fFBSHrya6GN3pz7OOYAWtNWzrs+fq+INta1s/RpUbWneMHA6eLmK0N2nrzrODouBcT5lKfgA0m5F7VsZwUFA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj",
+  "projectFilePath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\EvanQ\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\EvanQ\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"

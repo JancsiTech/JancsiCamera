@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0EZJ3+mEt+1HIxYcLufOHxOZhnO/wMl3nADhJ47qfaLO8+K67t+S6r0BHoyey7AIe2Eqq0JdZwHsyEF9pqrAsw==",
+  "dgSpecHash": "v3NZHXtyiiYxulHh7KI1d9FRxnf7EjG0QviI6zWX/FzO/zHoIwsBBO4pVBac4rcMwOHTFV+FEYJ0nCBA579o+w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\EvanQ\\source\\repos\\testCameraSDK\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj",
+  "projectFilePath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\EvanQ\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\EvanQ\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\6.0.1\\microsoft.extensions.dependencyinjection.6.0.1.nupkg.sha512",
