@@ -35,7 +35,14 @@ namespace JancsiVisionCameraServers
         /// 相机配置集合 先留着逻辑看放在哪里
         /// </summary>
         public Dto_CameraConfig _CameraConfig;
-
+        /// <summary>
+        /// Preheating Start Time
+        /// </summary>
+        public DateTime _PreheatingStartTime { get; set; }
+        /// <summary>
+        /// Preheating End Time
+        /// </summary>
+        public DateTime _PreheatingEndTime { get; set; }
         /// <summary>
         /// 相机配置详情
         /// </summary>
@@ -76,16 +83,16 @@ namespace JancsiVisionCameraServers
             {
 
                 // this._log.LogInfo(string.Format("log:当前线程id{0}，is{1}", Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.IsThreadPoolThread));
-                if (_CameraOperation.IsAvailable)
+                if (_CameraOperation.IsAvailable&& isReady())
                 {
-                    int triggerNum;
+                    
                     // Start continuous acquisition.
 
                     while (_CloudData == null || _CloudData.Count == 0)
                     {
 
-                        CogStopwatch stop = new CogStopwatch();
-                        stop.Start();
+                        //CogStopwatch stop = new CogStopwatch();
+                        //stop.Start();
                         _MainCogFifo.OwnedTriggerParams.TriggerEnabled = true;
 
                         // Acquire a single vision data container.
@@ -96,8 +103,8 @@ namespace JancsiVisionCameraServers
 
                         // Stop continuous acquisition.
 
-                        stop.Stop();
-                        Console.WriteLine("fifotime" + stop.Milliseconds);
+                        //stop.Stop();
+                        //Console.WriteLine("fifotime" + stop.Milliseconds);
 
                         if (image != null)
                         {
@@ -130,7 +137,7 @@ namespace JancsiVisionCameraServers
                     }
 
                 }
-                // _DicPoint3d[this] = _CloudData;
+                _DicPoint3d[_CameraOperation] = _CloudData;
                 return _DicPoint3d;
             }
             catch (Exception ex)
@@ -354,9 +361,9 @@ namespace JancsiVisionCameraServers
             }
         }
 
-        public Dto_CameraConfig getCameraConfig()
+        public Dto_CameraOperation getCameraConfig()
         {
-            throw new NotImplementedException();
+           return _CameraOperation;
         }
         /// <summary>
         /// 获取相机ROI参数
@@ -365,7 +372,7 @@ namespace JancsiVisionCameraServers
         /// <exception cref="NotImplementedException"></exception>
         public Dto_CameraROI getCameraROI()
         {
-            throw new NotImplementedException();
+            return _CameraOperation.ROI;
         }
         /// <summary>
         /// 
@@ -383,7 +390,7 @@ namespace JancsiVisionCameraServers
         /// <exception cref="NotImplementedException"></exception>
         public bool isReady()
         {
-            throw new NotImplementedException();
+            return getReadinessPercentile() >= 1;
         }
 
         // Multiple AcqFifo objects can exist for a single FrameGrabber. Each AcqFifo owns a set of parameters that are
@@ -418,7 +425,7 @@ namespace JancsiVisionCameraServers
 
                 // Set the exposure time to 400µs (note that the exposure needs to be given in milliseconds).
                 // The default value is 1000µs. The minimum value is 10µs. The maximum value is 50000µs.
-                _MainCogFifo.OwnedExposureParams.Exposure = 0.4;
+                _MainCogFifo.OwnedExposureParams.Exposure = 1.1;
 
                 // A lot of the device configuration is done using custom properties which are added to the
                 // acqFifo.OwnedCustomPropertiesParams.CustomProps list. The following code provides comfortable
@@ -526,7 +533,7 @@ namespace JancsiVisionCameraServers
 
                         // Each individual 3D point is reconstructed with a confidence score that ranges from 0.0 to 1.0.
                         // The user can choose a threshold to remove 3D points with a lower confidence score. The default value is 0.85.
-                        case "score_threshold": propertyValue = "0.85"; break;
+                        case "score_threshold": propertyValue = "0.915"; break;
 
                         // Defines a frustum-shaped volume in which 3D points will be reconstructed.
                         // For 3D-A5000 devices, the user can choose between "Extended" and "Standard". The default value is "Extended".
@@ -588,13 +595,33 @@ namespace JancsiVisionCameraServers
                 //throw;
             }
 
-
-
         }
 
         public bool setCameraROI(Dto_CameraROI ROI)
         {
-            throw new NotImplementedException();
+            bool isDown = false;
+            if (ROI!=null)
+            {
+                _CameraOperation.ROI = ROI;
+            }
+            else
+            {
+                //log peizhiweikong
+            }
+
+            //重新设置 
+            //setCameraConfig();
+            return isDown;
+        }
+
+        public double getReadinessPercentile()
+        {
+            //根据预热开始时间，结束时间和当前时间计算百分比
+            double Numerator = (_PreheatingEndTime.Hour-_PreheatingStartTime.Hour) * 60 * 60 + (_PreheatingEndTime.Minute - _PreheatingStartTime.Minute) * 60 +
+                (_PreheatingEndTime.Second - _PreheatingStartTime.Second);
+            DateTime dtNow = DateTime.Now;
+            double Denominator = dtNow.Hour * 60 * 60 + dtNow.Minute * 60 + dtNow.Second;
+            return Numerator / Denominator;
         }
     }
 }

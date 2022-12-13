@@ -37,7 +37,7 @@ namespace JancsiVisionCameraServers.Interfaces
         /// 相机配置
         /// </summary>
         /// <returns></returns>
-        Dto_CameraConfig getCameraConfig();
+        Dto_CameraOperation getCameraConfig();
 
         /// <summary>
         /// 设置相机配置
@@ -61,5 +61,10 @@ namespace JancsiVisionCameraServers.Interfaces
         /// </summary>
         /// <returns></returns>
         bool Calibrate();
+        /// <summary>
+        /// 获取当前预热进度
+        /// </summary>
+        /// <returns></returns>
+        double getReadinessPercentile();
     }
 }

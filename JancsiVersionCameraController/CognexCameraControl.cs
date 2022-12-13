@@ -16,11 +16,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
+using System.Timers;
 
 namespace JancsiVersionCameraController
 {
     public class CognexCameraControl : ICameraControlServer
     {
+
         /// <summary>
         /// 错误信息
         /// </summary>
@@ -29,9 +31,12 @@ namespace JancsiVersionCameraController
         /// 相机信息
         /// </summary>
         private List<CongexCameraServer> cameras;
-        // private List<string> cameras;
 
+        /// <summary>
+        /// 相机配置对应点云信息
+        /// </summary>
         private Dictionary<Dto_CameraOperation, Dto_PointCloud> dicCamera;
+
         /// <summary>
         /// 返回相机信息
         /// </summary>
@@ -137,10 +142,12 @@ namespace JancsiVersionCameraController
                 }
                 //累加函数
                 int index = 0;
+
+
                 foreach (ICogFrameGrabber foundFrameGrabber in frameGrabbers)
                 {
 
-                    Console.WriteLine("Found frame grabber " + foundFrameGrabber.Name);
+                    Console.WriteLine("Found frame grabber " + foundFrameGrabber.Name + foundFrameGrabber.SerialNumber);
                     if (foundFrameGrabber.Name == "Device: Lion" || foundFrameGrabber.Name.Contains("Device: 3D-A"))
                     {
 
@@ -149,6 +156,9 @@ namespace JancsiVersionCameraController
                         //将相机实例加载到相机类
                         congexCamera._MainCogCrabber = foundFrameGrabber;
                         //初始化预热时间
+                        congexCamera._PreheatingStartTime = DateTime.Now;
+
+                        congexCamera._PreheatingEndTime = congexCamera._PreheatingStartTime.AddMinutes(40);
 
                         //对照相机位置配置相机信息
                         congexCamera._CameraOperation = new Dto_CameraOperation();
@@ -232,7 +242,12 @@ namespace JancsiVersionCameraController
                 Console.WriteLine("Can not Found frame grabber " + ex.ToString());
             }
         }
+        private static void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            //修改传出变量
 
+
+        }
 
         ///// <summary>
         ///// （扩展方法）如果字符串为空则返回""
@@ -283,6 +298,7 @@ namespace JancsiVersionCameraController
                             // Configuration needs to be reapplied.
                             device.setCameraConfig();
 
+
                         }
 
                     }
@@ -294,6 +310,8 @@ namespace JancsiVersionCameraController
                 throw;
             }
         }
+
+
         /// <summary>
         /// 相机数
         /// </summary>
@@ -314,8 +332,8 @@ namespace JancsiVersionCameraController
                 foreach (CongexCameraServer device in cameras)
                 {
                     device.disconnect();
-                }
 
+                }
             }
             else
             {

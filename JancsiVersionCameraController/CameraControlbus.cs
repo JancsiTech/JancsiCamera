@@ -31,7 +31,7 @@ namespace JancsiVisionCameraController
                 cameraControl.init();
 
                 Console.WriteLine("等操作结束");
-                Console.ReadLine();
+                // Console.ReadLine();
 
             }
             Console.Read();
@@ -41,7 +41,7 @@ namespace JancsiVisionCameraController
         /// <summary>
         /// 开始获取
         /// </summary>
-        public Dictionary<Dto_CameraOperation, Dto_PointCloud> StartTrige()
+        public Dictionary<Dto_CameraOperation, Dto_PointCloud> StartTrigger()
         {
             Dictionary<Dto_CameraOperation, Dto_PointCloud> dicPin = new Dictionary<Dto_CameraOperation, Dto_PointCloud>();
 
