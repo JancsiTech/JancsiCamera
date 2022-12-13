@@ -1,2 +1,3 @@
-# JancsitechViewer
+# JancsitechCamera
+
 Jancsitech Camera SDK
