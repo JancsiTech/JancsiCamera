@@ -22,6 +22,8 @@ namespace JancsiVersionCameraController
 {
     public class CognexCameraControl : ICameraControlServer
     {
+        private readonly ILogProvider _log;
+        private readonly IConfigService _config;
 
         /// <summary>
         /// 错误信息
@@ -45,6 +47,13 @@ namespace JancsiVersionCameraController
         {
 
             return cameras;
+        }
+
+        public CognexCameraControl(ILogProvider log, IConfigService config)
+        {
+
+            _log = log;
+            _config = config;
         }
 
         //private static ConcurrentDictionary<int, string> Dic = new ConcurrentDictionary<int, string>();
@@ -115,13 +124,15 @@ namespace JancsiVersionCameraController
                 return null;
             }
         }
+
+
+
         /// <summary>
         /// cog-康耐视 初始化加载
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
         public void init()
         {
-
             try
             {
                 cameras = new List<CongexCameraServer>();
@@ -152,7 +163,7 @@ namespace JancsiVersionCameraController
                     {
 
                         //实例化相机类
-                        CongexCameraServer congexCamera = new CongexCameraServer(foundFrameGrabber);
+                        CongexCameraServer congexCamera = new CongexCameraServer(foundFrameGrabber, _log, _config);
                         //将相机实例加载到相机类
                         congexCamera._MainCogCrabber = foundFrameGrabber;
                         //初始化预热时间

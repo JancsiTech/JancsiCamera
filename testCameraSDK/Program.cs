@@ -14,30 +14,30 @@ namespace testCameraSDK
     {
         static void Main(string[] args)
         {
-            JancsiUtilityServer jancsiUtilityServer = new JancsiUtilityServer();
-            jancsiUtilityServer.fusionPointClouds(null);
-            //CameraControlbus control = new CameraControlbus();
-            //control.initData();
-            //int i = 0;
-            //while (true)
-            //{
-            //    i++;
-            //    if (i == 5)
-            //    {
-            //        GC.Collect();
-            //    }
-            //    Stopwatch watch = new Stopwatch();
-            //    watch.Start();
-            //    //去到多个相机的点云
-            //    var PointDz = control.StartTrige();
-            //    watch.Stop();
-            //    //接入算法
+            //JancsiUtilityServer jancsiUtilityServer = new JancsiUtilityServer();
+            // jancsiUtilityServer.fusionPointClouds(null);
+            CameraControlbus control = new CameraControlbus();
+            control.initData();
+            int i = 0;
+            while (true)
+            {
+                i++;
+                if (i == 5)
+                {
+                    GC.Collect();
+                }
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                //去到多个相机的点云
+                var PointDz = control.StartTrigger();
+                watch.Stop();
+                //接入算法
 
-            //    //生成图像
+                //生成图像
 
-            //    //
-            //    Console.WriteLine(string.Format("cloud pint  take time :{0}", watch.ElapsedMilliseconds.ToString()));
-            //}
+                //
+                Console.WriteLine(string.Format("cloud pint  take time :{0}", watch.ElapsedMilliseconds.ToString()));
+            }
 
 
         }

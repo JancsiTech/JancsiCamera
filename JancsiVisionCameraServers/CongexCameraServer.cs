@@ -4,10 +4,12 @@ using Cognex.VisionPro3D;
 using JancsiVisionCameraServers.Interfaces;
 using JancsiVisionCameraServers.Model;
 using JancsiVisionConfigServices;
+using JancsiVisionConfigServices.Model;
 using JancsiVisionLogServers;
 using JancsiVisionPointCloudServers.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Windows.Automation.Peers;
@@ -58,8 +60,10 @@ namespace JancsiVisionCameraServers
             _log = log;
             _config = config;
         }
-        public CongexCameraServer(ICogFrameGrabber icogGrabber)
+        public CongexCameraServer(ICogFrameGrabber icogGrabber, ILogProvider log, IConfigService config)
         {
+            _log = log;
+            _config = config;
             _MainCogCrabber = icogGrabber;
             _CameraOperation = new Dto_CameraOperation();
             _DicPoint3d = new Dictionary<Dto_CameraOperation, List<Point3D>>();
@@ -70,22 +74,23 @@ namespace JancsiVisionCameraServers
         {
             throw new NotImplementedException();
         }
-        CogImage16Range image;
+
         /// <summary>
         /// 实例化并获取点云
         /// </summary>
         /// <returns></returns>
         public Dictionary<Dto_CameraOperation, List<Point3D>> connect()
         {
+            _config.GetCameraConfig(_CameraOperation.SerialNumber);
             _CloudData = new List<Point3D>();
 
             try
             {
 
                 // this._log.LogInfo(string.Format("log:当前线程id{0}，is{1}", Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.IsThreadPoolThread));
-                if (_CameraOperation.IsAvailable&& isReady())
+                if (_CameraOperation.IsAvailable && isReady())
                 {
-                    
+
                     // Start continuous acquisition.
 
                     while (_CloudData == null || _CloudData.Count == 0)
@@ -363,7 +368,7 @@ namespace JancsiVisionCameraServers
 
         public Dto_CameraOperation getCameraConfig()
         {
-           return _CameraOperation;
+            return _CameraOperation;
         }
         /// <summary>
         /// 获取相机ROI参数
@@ -401,6 +406,48 @@ namespace JancsiVisionCameraServers
             bool Setted = false;
             try
             {
+                //if there are configs
+                if (_config != null)
+                {
+                    JancsiVisionConfigServices.Model.CameraConfig cameraConfig = _config.GetEnvironmentConfig("camera");
+                    if (cameraConfig != null && cameraConfig.Cameras.Count > 0)
+                    {
+                        CameraSetting ChoseCameraSetting = cameraConfig.Cameras.Where(o => o.Name == _CameraOperation.Name && o.SerialNumber == _CameraOperation.SerialNumber).FirstOrDefault();
+                        if (ChoseCameraSetting != null)
+                        {
+                            #region chage option data
+                            _CameraOperation.Capture.ExposureLevel = ChoseCameraSetting.Capture.ExposureLevel;
+                            _CameraOperation.Capture.EnableHighExposure = ChoseCameraSetting.Capture.EnableHighExposure;
+                            _CameraOperation.Capture.EnableLowExposure = ChoseCameraSetting.Capture.EnableLowExposure;
+                            _CameraOperation.Capture.HighExposureLevel = ChoseCameraSetting.Capture.HighExposureLevel;
+                            _CameraOperation.Capture.LowExposureLevel = ChoseCameraSetting.Capture.LowExposureLevel;
+                            _CameraOperation.Capture.ImagesCount = int.Parse(ChoseCameraSetting.Capture.ImagesCount.ToString());
+                            _CameraOperation.Capture.Compress = (JancsiVisionCameraServers.Model.Compression)Enum.Parse(typeof(JancsiVisionCameraServers.Model.Compression), ChoseCameraSetting.Capture.Compress.ToString(), true);
+                            _CameraOperation.Capture.ExposureLevel = ChoseCameraSetting.Capture.ExposureLevel;
+                            _CameraOperation.ROI.Height = ChoseCameraSetting.ROI.Height;
+                            _CameraOperation.ROI.Width = ChoseCameraSetting.ROI.Width;
+                            _CameraOperation.ROI.Camera1OffsetX = ChoseCameraSetting.ROI.Camera1OffsetX;
+                            _CameraOperation.ROI.Camera1OffsetY = ChoseCameraSetting.ROI.Camera1OffsetY;
+                            _CameraOperation.ROI.Camera2OffsetX = ChoseCameraSetting.ROI.Camera2OffsetX;
+                            _CameraOperation.ROI.Camera2OffsetY = ChoseCameraSetting.ROI.Camera2OffsetY;
+                            _CameraOperation.ReconstructionQuality.Quality = ChoseCameraSetting.ReconstructionQuality.Quality;
+                            _CameraOperation.PostFilter.ExceptionValueFilter = (JancsiVisionCameraServers.Model.OutlierFilter)Enum.Parse(typeof(JancsiVisionCameraServers.Model.OutlierFilter), ChoseCameraSetting.PostFilter.ExceptionValueFilter.ToString(), true);
+                            _CameraOperation.PreFilter.Threshold = ChoseCameraSetting.PreFilter.Threshold;
+                            _CameraOperation.PostFilter.Threshold = ChoseCameraSetting.PostFilter.Threshold;
+                            _CameraOperation.PostFilter.WorkingVolume = (JancsiVisionCameraServers.Model.WorkingVolumeValue)Enum.Parse(typeof(JancsiVisionCameraServers.Model.WorkingVolumeValue), ChoseCameraSetting.PostFilter.WorkingVolume.ToString(), true);
+                            _CameraOperation.RegionExtract.EnableVOI = ChoseCameraSetting.RegionExtract.EnableVOI;
+                            _CameraOperation.RegionExtract.LimitationXMax = ChoseCameraSetting.RegionExtract.LimitationXMax;
+                            _CameraOperation.RegionExtract.LimitationYMax = ChoseCameraSetting.RegionExtract.LimitationYMax;
+                            _CameraOperation.RegionExtract.LimitationZMax = ChoseCameraSetting.RegionExtract.LimitationZMax;
+                            _CameraOperation.RegionExtract.LimitationXMin = ChoseCameraSetting.RegionExtract.LimitationXMin;
+                            _CameraOperation.RegionExtract.LimitationYMin = ChoseCameraSetting.RegionExtract.LimitationYMin;
+                            _CameraOperation.RegionExtract.LimitationZMin = ChoseCameraSetting.RegionExtract.LimitationZMin;
+                            #endregion
+
+                        }
+                    }
+                }
+
                 // CUDA device selection.
                 //
                 // This setting needs to be applied before any other setting. Changing it after any other settings have been
@@ -411,7 +458,7 @@ namespace JancsiVisionCameraServers
                 //
                 // By default the cudaDeviceString is null. To select a device different from the default run this
                 // example once and choose one of the displayed valid options for the cuda_device string property.
-                string cudaDeviceString = "[0] NVIDIA GeForce RTX 3090"; // Change this to "[0] GeForce GTX 1080" for example.
+                string cudaDeviceString = _CameraOperation.cudaDeviceString;//"[0] NVIDIA GeForce RTX 3090"; // Change this to "[0] GeForce GTX 1080" for example.
                 if (cudaDeviceString != null)
                 {
                     Console.WriteLine("Using non-default cuda device: " + cudaDeviceString);
@@ -425,7 +472,7 @@ namespace JancsiVisionCameraServers
 
                 // Set the exposure time to 400µs (note that the exposure needs to be given in milliseconds).
                 // The default value is 1000µs. The minimum value is 10µs. The maximum value is 50000µs.
-                _MainCogFifo.OwnedExposureParams.Exposure = 1.1;
+                _MainCogFifo.OwnedExposureParams.Exposure = _CameraOperation.Capture.ExposureLevel;
 
                 // A lot of the device configuration is done using custom properties which are added to the
                 // acqFifo.OwnedCustomPropertiesParams.CustomProps list. The following code provides comfortable
@@ -466,7 +513,7 @@ namespace JancsiVisionCameraServers
                         // will require approximately a 4x longer exposure to take advantage of the larger dynamic range.
                         // The "Medium" and "High" settings are using 12 - bit acquisition which leads to a longer acquisition time
                         // compared to "None" and "Low" settings which use 10 - bit acquisition.The default value is "Low".
-                        case "compression": propertyValue = "Low"; break;
+                        case "compression": propertyValue = _CameraOperation.Capture.Compress.ToString(); break;
 
                         // Set the minimum ratio of frame time to exposure (requires expert-mode).
                         // When frame_time_exposure_ratio_auto is set to true, the value of frame_time_exposure_ratio is ignored.
@@ -486,10 +533,10 @@ namespace JancsiVisionCameraServers
                         // Low and High HDR are not mutually exclusive. This means, that the device will make 3 acquisitions.
                         // Enabling one of these using the checkbox makes the sensor acquire an additional sequence with another exposure time to use for reconstruction.
                         // Please be aware, that HDR has to be disabled in order to be able to use the FreeRun TriggerModel.
-                        case "hdr_high_exposure": propertyValue = "6000"; break; // value in microseconds
-                        case "hdr_high_exposure_enable": propertyValue = "False"; break;
-                        case "hdr_low_exposure": propertyValue = "700"; break; // value in microseconds
-                        case "hdr_low_exposure_enable": propertyValue = "False"; break;
+                        case "hdr_high_exposure": propertyValue = _CameraOperation.Capture.HighExposureLevel.ToString(); ; break; // value in microseconds
+                        case "hdr_high_exposure_enable": propertyValue = _CameraOperation.Capture.EnableHighExposure.ToString(); break;
+                        case "hdr_low_exposure": propertyValue = _CameraOperation.Capture.LowExposureLevel.ToString(); break; // value in microseconds
+                        case "hdr_low_exposure_enable": propertyValue = _CameraOperation.Capture.EnableLowExposure.ToString(); break;
 
                         // Sets the region of interest for the 2D cameras.
                         // These values are ignored when binning is enabled.
@@ -498,16 +545,16 @@ namespace JancsiVisionCameraServers
                         // - 80x4 is the minimum resolution
                         // - increment of 'width',  'camera_1_offset_x' and 'camera_2_offset_x' is 8
                         // - increment of 'height', 'camera_1_offset_y' and 'camera_2_offset_y' is 4
-                        case "width": propertyValue = "896"; break;
-                        case "height": propertyValue = "800"; break;
-                        case "camera_1_offset_x": propertyValue = "48"; break;
-                        case "camera_1_offset_y": propertyValue = "0"; break;
-                        case "camera_2_offset_x": propertyValue = "120"; break;
-                        case "camera_2_offset_y": propertyValue = "0"; break;
+                        case "width": propertyValue = _CameraOperation.ROI.Width.ToString(); break;
+                        case "height": propertyValue = _CameraOperation.ROI.Height.ToString(); break;
+                        case "camera_1_offset_x": propertyValue = _CameraOperation.ROI.Camera1OffsetX.ToString(); break;
+                        case "camera_1_offset_y": propertyValue = _CameraOperation.ROI.Camera1OffsetY.ToString(); break;
+                        case "camera_2_offset_x": propertyValue = _CameraOperation.ROI.Camera2OffsetX.ToString(); break;
+                        case "camera_2_offset_y": propertyValue = _CameraOperation.ROI.Camera2OffsetY.ToString(); break;
 
                         // Number of 2D frames acquired for a 3D reconstruction. A higher number typically means better quality but also longer acquisition times.
                         // The default value is 24. The minimum value is 12. The maximum value is 60.
-                        case "image_count": propertyValue = "20"; break;
+                        case "image_count": propertyValue = _CameraOperation.Capture.ImagesCount.ToString(); break;
 
                         // Set the LED brightness to 25% (requires expert-mode).
                         // It is recommended to not exceed a value of 25%, because extra pauses for thermal cooldown
@@ -519,38 +566,39 @@ namespace JancsiVisionCameraServers
                         // The user can choose between "Disabled", "Permissive", "Balanced" and "Strict".The default value is "Permissive".
                         // This parameter is especially useful when the score threshold is lower than 0.9 or the pre - filtering value is lower than 4.
                         // Otherwise it is advisable to apply the "Disabled" setting.
-                        case "outlier_filtering": propertyValue = "Disabled"; break;
+                        case "outlier_filtering": propertyValue = _CameraOperation.PostFilter.ExceptionValueFilter.ToString(); break;
 
                         // This value controls the reconstruction parameters.
                         // This setting does negatively affect the reconstruction time. The higher the setting, the higher the reconstruction time.
                         // The user can choose a value between 0 (lowest quality) and 9 (highest quality). The default value is 5.
-                        case "reconstruction_quality": propertyValue = "4"; break;
+                        case "reconstruction_quality": propertyValue = _CameraOperation.ReconstructionQuality.Quality.ToString(); break;
 
                         // This value controls the filtering that is applied to the camera images before reconstruction.
                         // This setting does positively affect the reconstruction time. The higher the setting, the lower the reconstruction time.
                         // The user can choose a value between 0 (minimum filter intensity) and 9 (maximum filter intensity). The default value is 3.
-                        case "pre_filtering": propertyValue = "3"; break;
+                        case "pre_filtering": propertyValue = _CameraOperation.PreFilter.Threshold.ToString(); break;
 
                         // Each individual 3D point is reconstructed with a confidence score that ranges from 0.0 to 1.0.
                         // The user can choose a threshold to remove 3D points with a lower confidence score. The default value is 0.85.
-                        case "score_threshold": propertyValue = "0.915"; break;
+                        case "score_threshold": propertyValue = _CameraOperation.PostFilter.Threshold.ToString(); break;
 
                         // Defines a frustum-shaped volume in which 3D points will be reconstructed.
                         // For 3D-A5000 devices, the user can choose between "Extended" and "Standard". The default value is "Extended".
                         // The extended volume is actually a combination of three frustums and may look somewhat distorted.
                         // This frustum volume can be visualized with the "Show Working Volume" button of the Point Cloud display.
-                        case "working_volume": propertyValue = "Extended"; break;
+                        case "working_volume": propertyValue = _CameraOperation.PostFilter.WorkingVolume.ToString(); break;
 
                         // Defines a volume of interest in which 3D points will be reconstructed.
                         // This feature can be enabled or disabled.
                         // When enabled, the user can specify the boundaries of the volume manually (in millimeters).
-                        case "volume_of_interest_enable": propertyValue = "true"; break;
-                        case "volume_of_interest_max_x": propertyValue = "250.0"; break;
-                        case "volume_of_interest_max_y": propertyValue = "250.0"; break;
-                        case "volume_of_interest_max_z": propertyValue = "-50.0"; break;
-                        case "volume_of_interest_min_x": propertyValue = "-250.0"; break;
-                        case "volume_of_interest_min_y": propertyValue = "-250.0"; break;
-                        case "volume_of_interest_min_z": propertyValue = "-400.0"; break;
+                        case "volume_of_interest_enable": propertyValue = _CameraOperation.RegionExtract.EnableVOI.ToString(); break;
+                        case "volume_of_interest_max_x": propertyValue = _CameraOperation.RegionExtract.LimitationXMax.ToString(); break;
+                        case "volume_of_interest_max_y": propertyValue = _CameraOperation.RegionExtract.LimitationYMax.ToString(); break;
+                        case "volume_of_interest_max_z": propertyValue = _CameraOperation.RegionExtract.LimitationZMax.ToString(); break;
+                        case "volume_of_interest_min_x": propertyValue = _CameraOperation.RegionExtract.LimitationXMin.ToString(); break;
+                        case "volume_of_interest_min_y": propertyValue = _CameraOperation.RegionExtract.LimitationYMin.ToString(); break;
+                        case "volume_of_interest_min_z": propertyValue = _CameraOperation.RegionExtract.LimitationZMin.ToString(); break;
+
                     }
 
                     if (propertyValue != null)
@@ -600,13 +648,15 @@ namespace JancsiVisionCameraServers
         public bool setCameraROI(Dto_CameraROI ROI)
         {
             bool isDown = false;
-            if (ROI!=null)
+            if (ROI != null)
             {
                 _CameraOperation.ROI = ROI;
+                isDown = true;
             }
             else
             {
                 //log peizhiweikong
+
             }
 
             //重新设置 
@@ -617,7 +667,7 @@ namespace JancsiVisionCameraServers
         public double getReadinessPercentile()
         {
             //根据预热开始时间，结束时间和当前时间计算百分比
-            double Numerator = (_PreheatingEndTime.Hour-_PreheatingStartTime.Hour) * 60 * 60 + (_PreheatingEndTime.Minute - _PreheatingStartTime.Minute) * 60 +
+            double Numerator = (_PreheatingEndTime.Hour - _PreheatingStartTime.Hour) * 60 * 60 + (_PreheatingEndTime.Minute - _PreheatingStartTime.Minute) * 60 +
                 (_PreheatingEndTime.Second - _PreheatingStartTime.Second);
             DateTime dtNow = DateTime.Now;
             double Denominator = dtNow.Hour * 60 * 60 + dtNow.Minute * 60 + dtNow.Second;

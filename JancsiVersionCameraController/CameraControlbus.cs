@@ -24,6 +24,7 @@ namespace JancsiVisionCameraController
             ServiceCollection services = new ServiceCollection();
 
             services.AddSingleton<ILogProvider, ConsoleLogProvider>();
+            services.AddSingleton<IConfigService, FileCongfigServer>();
             services.AddSingleton<ICameraControlServer, CognexCameraControl>();
             using (ServiceProvider sp = services.BuildServiceProvider())
             {

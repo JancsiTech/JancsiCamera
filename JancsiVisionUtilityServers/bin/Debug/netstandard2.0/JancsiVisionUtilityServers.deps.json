@@ -120,6 +120,9 @@
         }
       },
       "JancsiVisionConfigServices/1.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2"
+        },
         "runtime": {
           "JancsiVisionConfigServices.dll": {}
         }
@@ -153,17 +156,17 @@
           }
         }
       },
-      "Cognex.VisionPro.CorePlus/69.3.0.0": {
+      "Cognex.VisionPro.ImageProcessing/69.3.0.0": {
         "runtime": {
-          "Cognex.VisionPro.CorePlus.dll": {
+          "Cognex.VisionPro.ImageProcessing.dll": {
             "assemblyVersion": "69.3.0.0",
             "fileVersion": "0.0.0.0"
           }
         }
       },
-      "Cognex.VisionPro.ImageProcessing/69.3.0.0": {
+      "Cognex.VisionPro.CorePlus/69.3.0.0": {
         "runtime": {
-          "Cognex.VisionPro.ImageProcessing.dll": {
+          "Cognex.VisionPro.CorePlus.dll": {
             "assemblyVersion": "69.3.0.0",
             "fileVersion": "0.0.0.0"
           }
@@ -389,12 +392,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Cognex.VisionPro.CorePlus/69.3.0.0": {
+    "Cognex.VisionPro.ImageProcessing/69.3.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
-    "Cognex.VisionPro.ImageProcessing/69.3.0.0": {
+    "Cognex.VisionPro.CorePlus/69.3.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

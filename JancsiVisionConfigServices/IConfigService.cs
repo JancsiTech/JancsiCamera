@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JancsiVisionConfigServices.Model;
+using System;
 
 namespace JancsiVisionConfigServices
 {
@@ -6,6 +7,6 @@ namespace JancsiVisionConfigServices
     {
          string GetCameraConfig(string name);
 
-         string GetEnvironmentConfig(string name);
+        CameraConfig GetEnvironmentConfig(string name);
     }
 }

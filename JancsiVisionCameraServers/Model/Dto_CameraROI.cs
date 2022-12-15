@@ -25,7 +25,7 @@ namespace JancsiVisionCameraServers.Model
         /// <summary>
         /// 偏移量X
         /// </summary>
-        int _Camera1OffsetX = 40;
+        int _Camera1OffsetX = 48;
         /// <summary>
         /// 偏移量Y
         /// </summary>

@@ -110,6 +110,9 @@
         }
       },
       "JancsiVisionConfigServices/1.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2"
+        },
         "runtime": {
           "JancsiVisionConfigServices.dll": {}
         }

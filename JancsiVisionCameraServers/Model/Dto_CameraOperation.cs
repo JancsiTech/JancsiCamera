@@ -24,6 +24,9 @@ namespace JancsiVisionCameraServers.Model
         /// </summary>
         public string SerialNumber;
 
+        //GPU加速显卡名称 例： [0] NVIDIA GeForce RTX 3090"; // Change this to "[0] GeForce GTX 1080" for example.
+        public string cudaDeviceString = "";
+
         /// <summary>
         /// 相机名称-同系列产品可能相同 # not null
         /// </summary>
@@ -76,7 +79,7 @@ namespace JancsiVisionCameraServers.Model
         //Matrix affineMatrix; // persist on disk read from disk at loading time
 
     }
-    public class Capture 
+    public class Capture
     {
         //unit:ms
         //# important params regarding FPS,
@@ -85,33 +88,34 @@ namespace JancsiVisionCameraServers.Model
         /// <summary>
         /// 曝光度
         /// </summary>
-        float _ExposureLevel = 1100;
+        double _ExposureLevel = 1.1;
         bool _EnableLowExposure = false;
         //# HDR should be disabled by default
         /// <summary>
         /// HDR 低曝光度
         /// </summary>
-        float _LowExposureLevel = 700;
+        double _LowExposureLevel = 700;
         bool _EnableHighExposure = false;
         /// <summary>
         /// HDR 高曝光度
         /// </summary>
-        float _HighExposureLevel = 6000;
+        double _HighExposureLevel = 6000;
         Compression _Compress = Compression.Low;
 
-        public int ImagesCount { get { return _ImagesCount; } set { _ImagesCount = value;  } }
-        public float ExposureLevel { get { return _ExposureLevel; } set { _ExposureLevel = value; } }
-        public bool EnableLowExposure { get { return _EnableLowExposure; } set { _EnableLowExposure = value;  } }
-        public float LowExposureLevel { get { return _LowExposureLevel; } set { _LowExposureLevel = value;  } }
+        public int ImagesCount { get { return _ImagesCount; } set { _ImagesCount = value; } }
+        public double ExposureLevel { get { return _ExposureLevel; } set { _ExposureLevel = value; } }
+        public bool EnableLowExposure { get { return _EnableLowExposure; } set { _EnableLowExposure = value; } }
+        public double LowExposureLevel { get { return _LowExposureLevel; } set { _LowExposureLevel = value; } }
         public bool EnableHighExposure { get { return _EnableHighExposure; } set { _EnableHighExposure = value; } }
-        public float HighExposureLevel { get { return _HighExposureLevel; } set { _HighExposureLevel = value; } }
-        public Compression Compress { get { return _Compress; } set { _Compress = value;  } }
+        public double HighExposureLevel { get { return _HighExposureLevel; } set { _HighExposureLevel = value; } }
+        public Compression Compress { get { return _Compress; } set { _Compress = value; } }
 
         [Newtonsoft.Json.JsonIgnore]
         public int MinExposureLevel { get { return 10; } }
         [Newtonsoft.Json.JsonIgnore]
         public int MaxExposureLevel { get { return 50000; } }
 
+      
     }
     public enum Compression
     {
@@ -152,7 +156,7 @@ namespace JancsiVisionCameraServers.Model
     {
 
         float _Threshold = 0.915f;
-        OutlierFilter _ExceptionValueFilter = OutlierFilter.Disable;
+        OutlierFilter _ExceptionValueFilter = OutlierFilter.Disabled;
         WorkingVolumeValue _Workout = WorkingVolumeValue.Extended;
         public float Threshold { get { return _Threshold; } set { _Threshold = value; } }
         public OutlierFilter ExceptionValueFilter { get { return _ExceptionValueFilter; } set { _ExceptionValueFilter = value; } }
@@ -169,7 +173,7 @@ namespace JancsiVisionCameraServers.Model
     public class RegionExtract
     {
         //unit:mm
-        bool _EnableVOI = false;
+        bool _EnableVOI = true;
         int _LimitationXMin = -250;
         int _LimitationXMax = 250;
         int _LimitationYMin = -250;
@@ -194,7 +198,7 @@ namespace JancsiVisionCameraServers.Model
     /// </summary>
     public enum OutlierFilter
     {
-        Disable,
+        Disabled,
         Permissive,
         Balanced,
         Strict

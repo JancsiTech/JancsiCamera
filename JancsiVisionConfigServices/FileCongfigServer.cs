@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Linq;
+using JancsiVisionConfigServices.Model;
+using Newtonsoft.Json;
 
 namespace JancsiVisionConfigServices
 {
     public class FileCongfigServer : IConfigService
     {
         public string FilePath { get; set; }
+
+
         /// <summary>
         /// 可以从文件中读取默认相机配置
         /// </summary>
@@ -23,18 +27,26 @@ namespace JancsiVisionConfigServices
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public string GetEnvironmentConfig(string name)
+        public CameraConfig GetEnvironmentConfig(string name)
         {
-            ///从ini文件中获取
-            var kv = File.ReadAllLines(FilePath).Select(s => s.Split('=')).Select(strs => new { Name = strs[0], value = strs[1] }).SingleOrDefault(kc => kc.Name == name);
-            if (kv != null)
+            /////从ini文件中获取
+            //var kv = File.ReadAllLines(FilePath).Select(s => s.Split('=')).Select(strs => new { Name = strs[0], value = strs[1] }).SingleOrDefault(kc => kc.Name == name);
+            //if (kv != null)
+            //{
+            //    return kv.value;
+            //}
+            //else
+            //{
+            //    return null;
+            //}
+            string path = System.IO.Path.Combine(Environment.CurrentDirectory, "Config", "Camera.json");
+            CameraConfig config = new CameraConfig();
+            if (System.IO.File.Exists(path))
             {
-                return kv.value;
+                string jsonStr = File.ReadAllText(path, Encoding.UTF8);
+                config = Newtonsoft.Json.JsonConvert.DeserializeObject<CameraConfig>(jsonStr);
             }
-            else
-            {
-                return null;
-            }
+            return config;
 
         }
     }

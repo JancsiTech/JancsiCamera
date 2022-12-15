@@ -10,6 +10,7 @@ using Python.Runtime;
 using System.Diagnostics;
 using System.Windows.Media.Media3D;
 using System.IO;
+using System.Drawing;
 
 namespace JancsiVisionUtilityServers
 {
@@ -36,6 +37,50 @@ namespace JancsiVisionUtilityServers
             this.log = log;
             this.config = config;
         }
+        /// <summary>
+        /// 标定后点云传回
+        /// </summary>
+        /// <param name="dtoPointCloud"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Dto_Delta CalibrationCubeCalibrate(Dto_PointCloud dtoPointCloud)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// 单机标定 点云
+        /// </summary>
+        /// <param name="dtoPointCloud"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Dto_Delta CalibrationCubeFitting(Dto_PointCloud dtoPointCloud)
+        {
+            Dto_Delta dto_Delta=new Dto_Delta();
+
+            List<List<double>> lissPoint = TransformationStructure3D(dtoPointCloud.point3Ds);
+            using (Py.GIL())
+            {
+                //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
+                //All python objects should be declared as dynamic type.
+                Stopwatch stopwatch = new Stopwatch();
+                dynamic calib = Py.Import("calibration");
+                stopwatch.Start();
+                var listMarkedPoint = calib.CubeFitting(lissPoint);
+                //转换
+                foreach (var pointInfo in listMarkedPoint)
+                {
+                    string strPointInfo = pointInfo.ToString();
+                    strPointInfo = strPointInfo.Substring(1, strPointInfo.Length - 1);
+                    string[] strPointList =strPointInfo.Split(',');
+
+                }
+
+                stopwatch.Stop();                             //结束计时
+                Console.WriteLine(stopwatch.Elapsed);
+                Console.ReadKey();
+            }
+            return dto_Delta;
+        }
 
         /// <summary>
         /// 点云融合
@@ -45,20 +90,23 @@ namespace JancsiVisionUtilityServers
         /// <exception cref="NotImplementedException"></exception>
         public Dto_PointCloud fusionPointClouds(Dictionary<Dto_CameraOperation, Dto_PointCloud> DicCameraAndPoint)
         {
-            List<List<double>> pointsA=new List<List<double>>();
+            List<List<double>> pointsA = new List<List<double>>();
             pointsA.Add(new List<double>() { 48.0769219398499, 249.198717951775, -242.709350585938 });
             pointsA.Add(new List<double>() { 92.147434592247, 249.198717951775, -251.451873779297 });
 
 
-            List<List<double>> pointsB=new List<List<double>>();
+            List<List<double>> pointsB = new List<List<double>>();
             pointsB.Add(new List<double>() { 76.121793627739, 249.198717951775, -248.274230957031 });
             pointsB.Add(new List<double>() { 101.762819170952, 249.198717951775, -253.935241699219 });
 
-            List<List<double>>  pointsC =new List<List<double>>();
+            List<List<double>> pointsC = new List<List<double>>();
             pointsC.Add(new List<double>() { 84.134614109993, 249.198717951775, -250.586700439453 });
             pointsC.Add(new List<double>() { 88.14102435112, 249.198717951775, -250.538635253906 });
 
-            //List<List<List<double>>> listAllPouint = new List<List<List<double>>>();
+            List<List<List<double>>> listAllPouint = new List<List<List<double>>>();
+            listAllPouint.Add(pointsA);
+            listAllPouint.Add(pointsB);
+            listAllPouint.Add(pointsC); 
 
             Dto_PointCloud dicPoint = new Dto_PointCloud();
             ////All calls to python should be inside a using (Py.GIL()) {/* Your code here */} block.
@@ -71,6 +119,11 @@ namespace JancsiVisionUtilityServers
             //    }
             //}
 
+
+
+
+
+
             using (Py.GIL())
             {
                 //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
@@ -79,7 +132,7 @@ namespace JancsiVisionUtilityServers
                 //string strpth = Environment.CurrentDirectory + @"\pyd\";
                 dynamic calib = Py.Import("concatenate");
                 stopwatch.Start();
-                var ss = calib.Concatenate(pointsA, pointsB, pointsC);
+                var AfterFusionPoint = calib.Concatenate(listAllPouint);
                 stopwatch.Stop();                             //结束计时
                 Console.WriteLine(stopwatch.Elapsed);
                 Console.ReadKey();
@@ -87,17 +140,7 @@ namespace JancsiVisionUtilityServers
             return dicPoint;
         }
 
-        /// <summary>
-        /// 单机标定
-        /// </summary>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Dto_Delta getDeltaForTwoPointClouds(Dto_PointCloud p1, Dto_PointCloud p2)
-        {
-            throw new NotImplementedException();
-        }
+
         /// <summary>
         /// 6DoF误差计
         /// </summary>
@@ -110,28 +153,6 @@ namespace JancsiVisionUtilityServers
             throw new NotImplementedException();
         }
 
-        public void text()
-        {
-            //All calls to python should be inside a using (Py.GIL()) {/* Your code here */} block.
-            using (Py.GIL())
-            {
-                //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
-                //All python objects should be declared as dynamic type.
-                Stopwatch stopwatch = new Stopwatch();
-                string strpth = Environment.CurrentDirectory + @"\pyd\";
-
-                int[,] map = new int[,] { { 1, 2, 3 }, { 4, 5, 6 } };
-                int[][] newArray = { new int[] { 1, 3, 4, 5, 6 }, new int[] { 2, 4, 6, 8, 2 } };
-                //dynamic calib = Py.Import("one_cam");
-                dynamic calib = Py.Import("one_cam");
-                stopwatch.Start();
-                calib.calibration(0);
-                stopwatch.Stop();                             //结束计时
-                Console.WriteLine(stopwatch.Elapsed);
-                Console.ReadKey();
-            }
-
-        }
         /// <summary>
         /// 
         /// </summary>
