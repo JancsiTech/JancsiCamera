@@ -18,6 +18,19 @@
           }
         }
       },
+      "Microsoft.CSharp/4.7.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/Microsoft.CSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.CSharp.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.Extensions.DependencyInjection/7.0.0": {
         "type": "package",
         "dependencies": {
@@ -86,6 +99,19 @@
         },
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "pythonnet_py39_win/2.5.2": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Python.Runtime.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net40/Python.Runtime.dll": {
             "related": ".xml"
           }
         }
@@ -170,6 +196,24 @@
         "runtime": {
           "bin/placeholder/JancsiVisionPointCloudServers.dll": {}
         }
+      },
+      "JancsiVisionUtilityServers/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "JancsiVisionCameraServers": "1.0.0",
+          "JancsiVisionConfigServices": "1.0.0",
+          "JancsiVisionLogServers": "1.0.0",
+          "JancsiVisionPointCloudServers": "1.0.0",
+          "Microsoft.CSharp": "4.7.0",
+          "pythonnet_py39_win": "2.5.2"
+        },
+        "compile": {
+          "bin/placeholder/JancsiVisionUtilityServers.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/JancsiVisionUtilityServers.dll": {}
+        }
       }
     }
   },
@@ -195,6 +239,75 @@
         "microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
         "microsoft.bcl.asyncinterfaces.nuspec",
         "useSharedDesignerContext.txt"
+      ]
+    },
+    "Microsoft.CSharp/4.7.0": {
+      "sha512": "pTj+D3uJWyN3My70i2Hqo+OXixq3Os2D1nJ2x92FFo6sk8fYS1m1WLNTs0Dc1uPaViH0YvEEwvzddQ7y4rhXmA==",
+      "type": "package",
+      "path": "microsoft.csharp/4.7.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net45/_._",
+        "lib/netcore50/Microsoft.CSharp.dll",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.3/Microsoft.CSharp.dll",
+        "lib/netstandard2.0/Microsoft.CSharp.dll",
+        "lib/netstandard2.0/Microsoft.CSharp.xml",
+        "lib/portable-net45+win8+wp8+wpa81/_._",
+        "lib/uap10.0.16299/_._",
+        "lib/win8/_._",
+        "lib/wp80/_._",
+        "lib/wpa81/_._",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "microsoft.csharp.4.7.0.nupkg.sha512",
+        "microsoft.csharp.nuspec",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net45/_._",
+        "ref/netcore50/Microsoft.CSharp.dll",
+        "ref/netcore50/Microsoft.CSharp.xml",
+        "ref/netcore50/de/Microsoft.CSharp.xml",
+        "ref/netcore50/es/Microsoft.CSharp.xml",
+        "ref/netcore50/fr/Microsoft.CSharp.xml",
+        "ref/netcore50/it/Microsoft.CSharp.xml",
+        "ref/netcore50/ja/Microsoft.CSharp.xml",
+        "ref/netcore50/ko/Microsoft.CSharp.xml",
+        "ref/netcore50/ru/Microsoft.CSharp.xml",
+        "ref/netcore50/zh-hans/Microsoft.CSharp.xml",
+        "ref/netcore50/zh-hant/Microsoft.CSharp.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.0/Microsoft.CSharp.dll",
+        "ref/netstandard1.0/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/de/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/es/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/fr/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/it/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/ja/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/ko/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/ru/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/zh-hans/Microsoft.CSharp.xml",
+        "ref/netstandard1.0/zh-hant/Microsoft.CSharp.xml",
+        "ref/netstandard2.0/Microsoft.CSharp.dll",
+        "ref/netstandard2.0/Microsoft.CSharp.xml",
+        "ref/portable-net45+win8+wp8+wpa81/_._",
+        "ref/uap10.0.16299/_._",
+        "ref/win8/_._",
+        "ref/wp80/_._",
+        "ref/wpa81/_._",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "Microsoft.Extensions.DependencyInjection/7.0.0": {
@@ -429,6 +542,19 @@
         "packageIcon.png"
       ]
     },
+    "pythonnet_py39_win/2.5.2": {
+      "sha512": "L6z1Okj8QflolGDnUnU7rRd4WQXSGaaoHVy49IiY7b9ia9L6x80YIPrWk+s7RLJoA20VybClg7JFPyAjFIauAQ==",
+      "type": "package",
+      "path": "pythonnet_py39_win/2.5.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/Python.Runtime.dll",
+        "lib/net40/Python.Runtime.xml",
+        "pythonnet_py39_win.2.5.2.nupkg.sha512",
+        "pythonnet_py39_win.nuspec"
+      ]
+    },
     "System.Runtime.CompilerServices.Unsafe/4.5.3": {
       "sha512": "3TIsJhD1EiiT0w2CcDMN/iSSwnNnsrnbzeVHSKkaEgV85txMprmuO+Yq2AdSbeVGcg28pdNDTPK87tJhX7VFHw==",
       "type": "package",
@@ -514,6 +640,11 @@
       "type": "project",
       "path": "../JancsiVisionPointCloudServers/JancsiVisionPointCloudServers.csproj",
       "msbuildProject": "../JancsiVisionPointCloudServers/JancsiVisionPointCloudServers.csproj"
+    },
+    "JancsiVisionUtilityServers/1.0.0": {
+      "type": "project",
+      "path": "../JancsiVisionUtilityServers/JancsiVisionUtilityServers.csproj",
+      "msbuildProject": "../JancsiVisionUtilityServers/JancsiVisionUtilityServers.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -522,6 +653,7 @@
       "JancsiVisionConfigServices >= 1.0.0",
       "JancsiVisionLogServers >= 1.0.0",
       "JancsiVisionPointCloudServers >= 1.0.0",
+      "JancsiVisionUtilityServers >= 1.0.0",
       "Microsoft.Bcl.AsyncInterfaces >= 7.0.0",
       "Microsoft.Extensions.DependencyInjection >= 7.0.0",
       "Microsoft.Extensions.DependencyInjection.Abstractions >= 7.0.0",
@@ -567,6 +699,9 @@
             },
             "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj": {
               "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj"
+            },
+            "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionUtilityServers\\JancsiVisionUtilityServers.csproj": {
+              "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionUtilityServers\\JancsiVisionUtilityServers.csproj"
             }
           }
         }
@@ -614,5 +749,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“.NETStandard,Version=v2.0”还原包“pythonnet_py39_win 2.5.2”。此包可能与项目不完全兼容。",
+      "libraryId": "pythonnet_py39_win",
+      "targetGraphs": [
+        ".NETStandard,Version=v2.0"
+      ]
+    }
+  ]
 }

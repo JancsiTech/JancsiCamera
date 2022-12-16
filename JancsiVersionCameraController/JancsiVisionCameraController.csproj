@@ -17,6 +17,7 @@
     <ProjectReference Include="..\JancsiVisionConfigServices\JancsiVisionConfigServices.csproj" />
     <ProjectReference Include="..\JancsiVisionLogServers\JancsiVisionLogServers.csproj" />
     <ProjectReference Include="..\JancsiVisionPointCloudServers\JancsiVisionPointCloudServers.csproj" />
+    <ProjectReference Include="..\JancsiVisionUtilityServers\JancsiVisionUtilityServers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

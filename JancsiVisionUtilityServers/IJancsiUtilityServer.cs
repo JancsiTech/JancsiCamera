@@ -13,7 +13,7 @@ namespace JancsiVisionUtilityServers
 
         Dto_PointCloud rotatePointCloud(Dto_PointCloud origin, Dto_RotateMatrix rotateMatrix);
 
-        Dto_Delta CalibrationCubeCalibrate(Dto_PointCloud dtoPointCloud);
+        Dto_Delta CalibrationCubeCalibrate(List<List<double>> listEquations);
 
         Dto_Delta CalibrationCubeFitting(Dto_PointCloud dtoPointCloud); 
 

@@ -78,3 +78,5 @@ C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVersionCameraContro
 C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVersionCameraController\obj\x64\Debug\netstandard2.0\JancsiVisionCameraController.csproj.CopyComplete
 C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVersionCameraController\obj\x64\Debug\netstandard2.0\JancsiVisionCameraController.dll
 C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVersionCameraController\obj\x64\Debug\netstandard2.0\JancsiVisionCameraController.pdb
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVersionCameraController\bin\x64\Debug\netstandard2.0\JancsiVisionUtilityServers.dll
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVersionCameraController\bin\x64\Debug\netstandard2.0\JancsiVisionUtilityServers.pdb

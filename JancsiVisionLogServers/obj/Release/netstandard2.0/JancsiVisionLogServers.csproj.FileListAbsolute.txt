@@ -1,0 +1,10 @@
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVisionLogServers\bin\Release\netstandard2.0\JancsiVisionLogServers.deps.json
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVisionLogServers\bin\Release\netstandard2.0\JancsiVisionLogServers.dll
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVisionLogServers\bin\Release\netstandard2.0\JancsiVisionLogServers.pdb
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVisionLogServers\obj\Release\netstandard2.0\JancsiVisionLogServers.csproj.AssemblyReference.cache
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVisionLogServers\obj\Release\netstandard2.0\JancsiVisionLogServers.GeneratedMSBuildEditorConfig.editorconfig
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVisionLogServers\obj\Release\netstandard2.0\JancsiVisionLogServers.AssemblyInfoInputs.cache
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVisionLogServers\obj\Release\netstandard2.0\JancsiVisionLogServers.AssemblyInfo.cs
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVisionLogServers\obj\Release\netstandard2.0\JancsiVisionLogServers.csproj.CoreCompileInputs.cache
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVisionLogServers\obj\Release\netstandard2.0\JancsiVisionLogServers.dll
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\JancsiVisionLogServers\obj\Release\netstandard2.0\JancsiVisionLogServers.pdb

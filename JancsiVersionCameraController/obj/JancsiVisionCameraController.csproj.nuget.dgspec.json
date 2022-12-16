@@ -40,6 +40,9 @@
               },
               "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj": {
                 "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj"
+              },
+              "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionUtilityServers\\JancsiVisionUtilityServers.csproj": {
+                "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionUtilityServers\\JancsiVisionUtilityServers.csproj"
               }
             }
           }
@@ -329,6 +332,86 @@
               "target": "Package",
               "version": "[2.0.3, )",
               "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionUtilityServers\\JancsiVisionUtilityServers.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionUtilityServers\\JancsiVisionUtilityServers.csproj",
+        "projectName": "JancsiVisionUtilityServers",
+        "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionUtilityServers\\JancsiVisionUtilityServers.csproj",
+        "packagesPath": "C:\\Users\\EvanQ\\.nuget\\packages\\",
+        "outputPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionUtilityServers\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\EvanQ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Users\\EvanQ\\Desktop": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
+            "projectReferences": {
+              "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionCameraServers\\JancsiVisionCameraServers.csproj": {
+                "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionCameraServers\\JancsiVisionCameraServers.csproj"
+              },
+              "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj": {
+                "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionConfigServices\\JancsiVisionConfigServices.csproj"
+              },
+              "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj": {
+                "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionLogServers\\JancsiVisionLogServers.csproj"
+              },
+              "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj": {
+                "projectPath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "Microsoft.CSharp": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "pythonnet_py39_win": {
+              "target": "Package",
+              "version": "[2.5.2, )"
             }
           },
           "imports": [

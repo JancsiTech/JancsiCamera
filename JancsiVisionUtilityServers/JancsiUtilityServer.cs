@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Windows.Media.Media3D;
 using System.IO;
 using System.Drawing;
+using System.Linq;
 
 namespace JancsiVisionUtilityServers
 {
@@ -18,9 +19,10 @@ namespace JancsiVisionUtilityServers
     {
         private readonly ILogProvider log;
         private readonly IConfigService config;
-
+        List<Dto_RotateMatrix> _dtoMatrix;
         public JancsiUtilityServer()
         {
+            InitData();
             //string pathToVirtualEnv = @"/pyd";
 
             //Environment.SetEnvironmentVariable("PATH", pathToVirtualEnv, EnvironmentVariableTarget.Process);
@@ -37,15 +39,75 @@ namespace JancsiVisionUtilityServers
             this.log = log;
             this.config = config;
         }
+        public static class FormatStrings
+        {
+            public const string DoubleFixedPoint = "0.###################################################################################################################################################################################################################################################################################################################################################";
+        }
         /// <summary>
         /// 标定后点云传回
         /// </summary>
         /// <param name="dtoPointCloud"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Dto_Delta CalibrationCubeCalibrate(Dto_PointCloud dtoPointCloud)
+        public Dto_Delta CalibrationCubeCalibrate(List<List<double>> listEquations)
         {
-            throw new NotImplementedException();
+            Dto_Delta dto_Delta = new Dto_Delta();
+            foreach (Dto_RotateMatrix dtoTate in _dtoMatrix)
+            {
+                List<List<double>> listzzz = new List<List<double>>();
+                if (dtoTate.dto_PointCloud.point3Ds!=null&& dtoTate.dto_PointCloud.point3Ds.Count>0)
+                {
+                    List<List<double>> ss = dtoTate.dto_PointCloud.point3Ds.Select((f, i) => new List<double>
+                    {
+                        f.X,
+                        f.Y, 
+                        f.Z    
+                    }).ToList();
+                    if (listEquations != null && listEquations.Count > 0)
+                    {
+                        using (Py.GIL())
+                        {
+                            //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
+                            //All python objects should be declared as dynamic type.
+                            Stopwatch stopwatch = new Stopwatch();
+                            dynamic calib = Py.Import("calibration");
+                            stopwatch.Start();
+                            dynamic calibrationArray = calib.Calibrate(listEquations, ss);
+                            // var gg = calibrationArray.ToPython();
+                            //IEnumerable rest = calibrationArray.Rest;
+
+
+                            //string strPonit = calibrationArray.GetItem(0).ToString();
+
+
+                            //string[] strPont = strPonit.Substring(1, strPonit.Length - 2).Split(new string[] { "\n" }, StringSplitOptions.None);
+                            //foreach (string strPintEquations in strPont)
+                            //{
+                            //    List<double> listDou = new List<double>();
+                            //    string[] strEqution = strPintEquations.Substring(1, strPintEquations.Length - 2).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                            //    foreach (string strDou in strEqution)
+                            //    {
+                            //        listDou.Add(Convert.ToDouble(strDou));
+                            //    }
+                            //    lissDou.Add(listDou);
+                            //}
+
+                            //string strBol = calibrationArray.GetItem(1).ToString();
+
+
+                            //string[] strPontBol = strBol.Substring(1, strBol.Length - 2).Split(new string[] { "\n" }, StringSplitOptions.None);
+
+                            stopwatch.Stop();                             //结束计时
+                            Console.WriteLine(stopwatch.Elapsed);
+                            Console.ReadKey();
+                        }
+
+                    }
+
+                }
+            }
+           
+            return dto_Delta;
         }
         /// <summary>
         /// 单机标定 点云
@@ -55,8 +117,8 @@ namespace JancsiVisionUtilityServers
         /// <exception cref="NotImplementedException"></exception>
         public Dto_Delta CalibrationCubeFitting(Dto_PointCloud dtoPointCloud)
         {
-            Dto_Delta dto_Delta=new Dto_Delta();
-
+            Dto_Delta dto_Delta = new Dto_Delta();
+            List<List<double>> lissDou = new List<List<double>>();
             List<List<double>> lissPoint = TransformationStructure3D(dtoPointCloud.point3Ds);
             using (Py.GIL())
             {
@@ -65,15 +127,30 @@ namespace JancsiVisionUtilityServers
                 Stopwatch stopwatch = new Stopwatch();
                 dynamic calib = Py.Import("calibration");
                 stopwatch.Start();
-                var listMarkedPoint = calib.CubeFitting(lissPoint);
-                //转换
-                foreach (var pointInfo in listMarkedPoint)
-                {
-                    string strPointInfo = pointInfo.ToString();
-                    strPointInfo = strPointInfo.Substring(1, strPointInfo.Length - 1);
-                    string[] strPointList =strPointInfo.Split(',');
+                dynamic calibrationArray = calib.CubeFitting(lissPoint);
+                // var gg = calibrationArray.ToPython();
+                //IEnumerable rest = calibrationArray.Rest;
 
+
+                string strPonit = calibrationArray.GetItem(0).ToString();
+
+
+                string[] strPont = strPonit.Substring(1, strPonit.Length - 2).Split(new string[] { "\n" }, StringSplitOptions.None);
+                foreach (string strPintEquations in strPont)
+                {
+                    List<double> listDou = new List<double>();
+                    string[] strEqution = strPintEquations.Substring(1, strPintEquations.Length - 2).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string strDou in strEqution)
+                    {
+                        listDou.Add(Convert.ToDouble(strDou));
+                    }
+                    lissDou.Add(listDou);
                 }
+                CalibrationCubeCalibrate(lissDou);
+                //string strBol = calibrationArray.GetItem(1).ToString();
+
+
+                //string[] strPontBol = strBol.Substring(1, strBol.Length - 2).Split(new string[] { "\n" }, StringSplitOptions.None);
 
                 stopwatch.Stop();                             //结束计时
                 Console.WriteLine(stopwatch.Elapsed);
@@ -82,6 +159,16 @@ namespace JancsiVisionUtilityServers
             return dto_Delta;
         }
 
+        public void test()
+        {
+
+            // string sss = "     [ 2.82130383e-01,  7.06257745e-01,  6.49309206e-01,\r\n         1.94080211e+02]";
+            string s = "2.82130383e-01";
+            double safa = Convert.ToDouble(s);
+
+
+            //strPont[0].Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+        }
         /// <summary>
         /// 点云融合
         /// </summary>
@@ -106,7 +193,7 @@ namespace JancsiVisionUtilityServers
             List<List<List<double>>> listAllPouint = new List<List<List<double>>>();
             listAllPouint.Add(pointsA);
             listAllPouint.Add(pointsB);
-            listAllPouint.Add(pointsC); 
+            listAllPouint.Add(pointsC);
 
             Dto_PointCloud dicPoint = new Dto_PointCloud();
             ////All calls to python should be inside a using (Py.GIL()) {/* Your code here */} block.
@@ -186,6 +273,90 @@ namespace JancsiVisionUtilityServers
 
             return point3Ds;
 
+        }
+        public void InitData()
+        {
+
+            _dtoMatrix = new List<Dto_RotateMatrix>();
+            Dto_RotateMatrix dto_RotateMatrix0 = new Dto_RotateMatrix();
+            dto_RotateMatrix0.dto_PointCloud.point3Ds = new List<Point3D>();
+            #region camera 0 
+            Point3D carmera0Point3D1 = new Point3D();
+            carmera0Point3D1.X = 0;
+            carmera0Point3D1.Y = -106.06601717798123;
+            carmera0Point3D1.Z = 150;
+            Point3D carmera0Point3D2 = new Point3D();
+            carmera0Point3D2.X = -106.06601717798123;
+            carmera0Point3D2.Y = 0;
+            carmera0Point3D2.Z = 150;
+            Point3D carmera0Point3D3 = new Point3D();
+            carmera0Point3D3.X = 106.06601717798123;
+            carmera0Point3D3.Y = 0;
+            carmera0Point3D3.Z = 150;
+            Point3D carmera0Point3D4 = new Point3D();
+            carmera0Point3D4.X = 0;
+            carmera0Point3D4.Y = -106.06601717798123;
+            carmera0Point3D4.Z = 0;
+
+            dto_RotateMatrix0.dto_PointCloud.point3Ds.Add(carmera0Point3D1);
+            dto_RotateMatrix0.dto_PointCloud.point3Ds.Add(carmera0Point3D2);
+            dto_RotateMatrix0.dto_PointCloud.point3Ds.Add(carmera0Point3D3);
+            dto_RotateMatrix0.dto_PointCloud.point3Ds.Add(carmera0Point3D4);
+            #endregion
+
+            #region 90
+            Dto_RotateMatrix dto_RotateMatrix1 = new Dto_RotateMatrix();
+            dto_RotateMatrix1.dto_PointCloud.point3Ds = new List<Point3D>();
+            Point3D carmera1Point3D1 = new Point3D();
+            carmera1Point3D1.X = -106.06601717798123;
+            carmera1Point3D1.Y = 0;
+            carmera1Point3D1.Z = 150;
+            Point3D carmera1Point3D2 = new Point3D();
+            carmera1Point3D2.X = 0;
+            carmera1Point3D2.Y = 106.06601717798123;
+            carmera1Point3D2.Z = 150;
+            Point3D carmera1Point3D3 = new Point3D();
+            carmera1Point3D3.X = 0;
+            carmera1Point3D3.Y = -106.06601717798123;
+            carmera1Point3D3.Z = 150;
+            Point3D carmera1Point3D4 = new Point3D();
+            carmera1Point3D4.X = -106.06601717798123;
+            carmera1Point3D4.Y = 0;
+            carmera1Point3D4.Z = 0;
+            dto_RotateMatrix1.dto_PointCloud.point3Ds.Add(carmera1Point3D1);
+            dto_RotateMatrix1.dto_PointCloud.point3Ds.Add(carmera1Point3D2);
+            dto_RotateMatrix1.dto_PointCloud.point3Ds.Add(carmera1Point3D3);
+            dto_RotateMatrix1.dto_PointCloud.point3Ds.Add(carmera1Point3D4);
+            #endregion
+
+            #region 180
+            Dto_RotateMatrix dto_RotateMatrix2 = new Dto_RotateMatrix();
+            dto_RotateMatrix2.dto_PointCloud.point3Ds = new List<Point3D>();
+            Point3D carmera3Point3D1 = new Point3D();
+            carmera3Point3D1.X = 106.06601717798123;
+            carmera3Point3D1.Y = 0;
+            carmera3Point3D1.Z = 150;
+            Point3D carmera3Point3D2 = new Point3D();
+            carmera3Point3D2.X = 0;
+            carmera3Point3D2.Y = -106.06601717798123;
+            carmera3Point3D2.Z = 150;
+            Point3D carmera3Point3D3 = new Point3D();
+            carmera3Point3D3.X = 0;
+            carmera3Point3D3.Y = 106.06601717798123;
+            carmera3Point3D3.Z = 150;
+            Point3D carmera3Point3D4 = new Point3D();
+            carmera3Point3D4.X = 106.06601717798123;
+            carmera3Point3D4.Y = 0;
+            carmera3Point3D4.Z = 0;
+            dto_RotateMatrix2.dto_PointCloud.point3Ds.Add(carmera3Point3D1);
+            dto_RotateMatrix2.dto_PointCloud.point3Ds.Add(carmera3Point3D2);
+            dto_RotateMatrix2.dto_PointCloud.point3Ds.Add(carmera3Point3D3);
+            dto_RotateMatrix2.dto_PointCloud.point3Ds.Add(carmera3Point3D4);
+            #endregion
+
+            _dtoMatrix.Add(dto_RotateMatrix0);
+            _dtoMatrix.Add(dto_RotateMatrix1);
+            _dtoMatrix.Add(dto_RotateMatrix2);
         }
     }
 }

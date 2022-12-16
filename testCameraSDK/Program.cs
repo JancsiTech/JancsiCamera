@@ -15,7 +15,7 @@ namespace testCameraSDK
         static void Main(string[] args)
         {
             //JancsiUtilityServer jancsiUtilityServer = new JancsiUtilityServer();
-            // jancsiUtilityServer.fusionPointClouds(null);
+            //jancsiUtilityServer.test();
             CameraControlbus control = new CameraControlbus();
             control.initData();
             int i = 0;

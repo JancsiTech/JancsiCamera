@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 using System.Timers;
+using JancsiVisionUtilityServers.Model;
 
 namespace JancsiVersionCameraController
 {
@@ -378,6 +379,24 @@ namespace JancsiVersionCameraController
                 //log can not find camera
             }
             return cameraDeivce;
+        }
+
+        public List<Dto_RotateMatrix> InitMatrixByCamera()
+        {
+
+           
+
+            // dto_RotateMatrix.dto_PointCloud.point3Ds[0]
+
+
+            if (cameras != null && cameras.Count > 0)
+            {
+
+            }
+
+
+            return null;
+
         }
     }
 }
