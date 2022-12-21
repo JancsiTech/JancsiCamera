@@ -44,7 +44,7 @@ namespace JancsiVersionCameraController
         /// 返回相机信息
         /// </summary>
         /// <returns></returns>
-        private List<CongexCameraServer> listCameras()
+        public List<CongexCameraServer> GetListCameras()
         {
 
             return cameras;
@@ -102,6 +102,8 @@ namespace JancsiVersionCameraController
                         //dicCamera
                         foreach (var resluts in resultCollection)
                         {
+                            if (resluts == null)
+                                continue;
                             Dto_PointCloud dto_PointCloud = new Dto_PointCloud();
                             dto_PointCloud.point3Ds = resluts.First().Value;
 
@@ -136,6 +138,7 @@ namespace JancsiVersionCameraController
         {
             try
             {
+                JancsiVisionConfigServices.Model.CameraConfig cameraConfig = _config.GetEnvironmentConfig("camera");
                 cameras = new List<CongexCameraServer>();
                 _ErrorMessage = "";
 
@@ -213,11 +216,7 @@ namespace JancsiVersionCameraController
                         // Create an AcqFifo.
                         // congexCamera._MainCogFifo = foundFrameGrabber.CreateAcqFifo(foundFrameGrabber.AvailableVideoFormats[0], CogAcqFifoPixelFormatConstants.Format16Grey, 0, true);
 
-                        //congexCamera.setCameraConfig();
-
                         congexCamera.setCameraConfig();
-
-                        //congexCamera._MainCogFifo.Complete += new CogCompleteEventHandler(congexCamera.FIFO_Complete);
 
                         cameras.Add(congexCamera);
 

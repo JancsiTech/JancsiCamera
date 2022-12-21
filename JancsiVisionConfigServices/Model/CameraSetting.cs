@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,6 +37,7 @@ namespace JancsiVisionConfigServices.Model
         PostFiler _PostFilter;
         RegionExtract _RegionExtract;
         bool _IsAvailable;
+        List<LocationXYZ> _ThreeMachineCalibration;
         public CameraSetting()
         {
             Capture = new Capture();
@@ -45,6 +47,7 @@ namespace JancsiVisionConfigServices.Model
             PostFilter = new PostFiler();
             RegionExtract = new RegionExtract();
             IsAvailable = false;
+            _ThreeMachineCalibration = new List<LocationXYZ>();
         }
         [Newtonsoft.Json.JsonIgnore]
         public bool IsAvailable { get { return _IsAvailable; } set { _IsAvailable = value; } }
@@ -56,6 +59,9 @@ namespace JancsiVisionConfigServices.Model
         public PreFilter PreFilter { get { return _PreFilter; } set { _PreFilter = value; } }
         public PostFiler PostFilter { get { return _PostFilter; } set { _PostFilter = value; } }
         public RegionExtract RegionExtract { get { return _RegionExtract; } set { _RegionExtract = value; } }
+
+        public List<LocationXYZ> ThreeMachineCalibration { get { return _ThreeMachineCalibration; } set { _ThreeMachineCalibration = value; } }
+        
     }
     public enum Compression
     {
@@ -66,7 +72,7 @@ namespace JancsiVisionConfigServices.Model
     {
 
         float _ImagesCount = 24;
-        int _ExposureLevel = 1000;
+        double _ExposureLevel = 1.1;
         bool _EnableLowExposure = false;
         int _LowExposureLevel = 1000;
         bool _EnableHighExposure = false;
@@ -74,7 +80,7 @@ namespace JancsiVisionConfigServices.Model
         Compression _Compress = Compression.Low;
 
         public float ImagesCount { get { return _ImagesCount; } set { _ImagesCount = value; } }
-        public int ExposureLevel { get { return _ExposureLevel; } set { _ExposureLevel = value; } }
+        public double ExposureLevel { get { return _ExposureLevel; } set { _ExposureLevel = value; } }
         public bool EnableLowExposure { get { return _EnableLowExposure; } set { _EnableLowExposure = value; } }
         public int LowExposureLevel { get { return _LowExposureLevel; } set { _LowExposureLevel = value; } }
         public bool EnableHighExposure { get { return _EnableHighExposure; } set { _EnableHighExposure = value; } }
@@ -173,6 +179,16 @@ namespace JancsiVisionConfigServices.Model
         public int LimitationZMin { get { return _LimitationZMin; } set { _LimitationZMin = value; } }
         public int LimitationZMax { get { return _LimitationZMax; } set { _LimitationZMax = value; } }
         public bool Preview { get { return _Preview; } set { _Preview = value; } }
+
+    }
+
+    public class LocationXYZ
+    {
+
+        double _X, _Y, _Z;
+        public double X { get { return _X; } set { _X = value; } }
+        public double Y { get { return _Y; } set { _Y = value; } }
+        public double Z { get { return _Z; } set { _Z = value; } }
 
     }
 }

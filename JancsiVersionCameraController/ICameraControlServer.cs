@@ -58,7 +58,7 @@ namespace JancsiVisionCameraController
         /// </summary>
         /// <returns></returns>
         Dictionary<Dto_CameraOperation, Dto_PointCloud> triggerCapture();
-        
 
+        List<CongexCameraServer> GetListCameras();
     }
 }

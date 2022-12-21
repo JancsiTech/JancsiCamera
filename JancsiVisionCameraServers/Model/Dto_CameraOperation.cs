@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JancsiVisionConfigServices.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -74,8 +75,10 @@ namespace JancsiVisionCameraServers.Model
         /// 校准时间
         /// </summary>
         public DateTime? calibrateTime { get; set; }
-
-
+        /// <summary>
+        /// 相机物理坐标
+        /// </summary>
+        public List<LocationXYZ> _ThreeMachineCalibration;
         //Matrix affineMatrix; // persist on disk read from disk at loading time
 
     }
@@ -213,4 +216,5 @@ namespace JancsiVisionCameraServers.Model
         Standard,
         Extended
     }
+
 }

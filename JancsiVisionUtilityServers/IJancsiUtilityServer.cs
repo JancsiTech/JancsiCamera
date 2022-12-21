@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using JancsiVisionPointCloudServers.Model;
 using JancsiVisionCameraServers.Model;
+using JancsiVisionConfigServices.Model;
 
 namespace JancsiVisionUtilityServers
 {
@@ -13,7 +14,7 @@ namespace JancsiVisionUtilityServers
 
         Dto_PointCloud rotatePointCloud(Dto_PointCloud origin, Dto_RotateMatrix rotateMatrix);
 
-        Dto_Delta CalibrationCubeCalibrate(List<List<double>> listEquations);
+        Dto_Delta CalibrationCubeCalibrate(List<List<double>> listEquations, List<LocationXYZ> ThreeMachineCalibration);
 
         Dto_Delta CalibrationCubeFitting(Dto_PointCloud dtoPointCloud); 
 

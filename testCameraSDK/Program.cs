@@ -14,8 +14,8 @@ namespace testCameraSDK
     {
         static void Main(string[] args)
         {
-            //JancsiUtilityServer jancsiUtilityServer = new JancsiUtilityServer();
-            //jancsiUtilityServer.test();
+            JancsiUtilityServer jancsiUtilityServer = new JancsiUtilityServer();
+            ////jancsiUtilityServer.fusionPointClouds(null);
             CameraControlbus control = new CameraControlbus();
             control.initData();
             int i = 0;
@@ -30,8 +30,16 @@ namespace testCameraSDK
                 watch.Start();
                 //去到多个相机的点云
                 var PointDz = control.StartTrigger();
-                watch.Stop();
-                //接入算法
+                watch.Stop(); 
+                if (PointDz==null)
+                {
+                    return;
+                }
+                foreach (var item in PointDz.Keys)
+                {
+                    //接入算法
+                    jancsiUtilityServer.CalibrationCubeFitting(PointDz[item]);
+                }
 
                 //生成图像
 
