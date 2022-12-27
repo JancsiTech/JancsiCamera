@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "yxpC6VoOrjUDJKmDgrB/lMIJA+VmTIsdDHsJMhj/YvgKcue6LOnLMRbBVt/Au5hFOHOmrhADpDfDaehaIiyBRw==",
+  "dgSpecHash": "N5+ty+VRHFHZozdWVryzzBwZAfzSr59yBwLS5cO6W4ChGqHuL3bFzZ2kSa/z2mknoN6nz4qDXCAE53GhHReJ0Q==",
   "success": true,
   "projectFilePath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVersionCameraController\\JancsiVisionCameraController.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\EvanQ\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512",
     "C:\\Users\\EvanQ\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
     "C:\\Users\\EvanQ\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\EvanQ\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\7.0.0\\microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",

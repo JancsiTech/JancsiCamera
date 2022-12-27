@@ -444,7 +444,7 @@ namespace JancsiVisionCameraServers
                             _CameraOperation.RegionExtract.LimitationZMin = ChoseCameraSetting.RegionExtract.LimitationZMin;
                             _CameraOperation._ThreeMachineCalibration = ChoseCameraSetting.ThreeMachineCalibration;
                             //增加读取相机对应物理坐标信息
-
+                            _CameraOperation._CameraAffineMatrixl = ChoseCameraSetting.CameraAffineMatrixl;
                             #endregion
 
                         }

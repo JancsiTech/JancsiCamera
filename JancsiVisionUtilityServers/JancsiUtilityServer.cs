@@ -13,6 +13,10 @@ using System.IO;
 using System.Drawing;
 using System.Linq;
 using JancsiVisionConfigServices.Model;
+using Newtonsoft.Json.Linq;
+using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.LinearAlgebra.Double;
+using System.Numerics;
 
 namespace JancsiVisionUtilityServers
 {
@@ -20,9 +24,10 @@ namespace JancsiVisionUtilityServers
     {
         private readonly ILogProvider log;
         private readonly IConfigService config;
-
+        private FileCongfigServer _fileCongfigServer;
         public JancsiUtilityServer()
         {
+            _fileCongfigServer = new FileCongfigServer();
             //string pathToVirtualEnv = @"/pyd";
             //Environment.SetEnvironmentVariable("PATH", pathToVirtualEnv, EnvironmentVariableTarget.Process);
             //Environment.SetEnvironmentVariable("PYTHONHOME", pathToVirtualEnv, EnvironmentVariableTarget.Process);
@@ -46,14 +51,15 @@ namespace JancsiVisionUtilityServers
         /// <param name="dtoPointCloud"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Dto_Delta CalibrationCubeCalibrate(List<List<double>> listEquations, List<LocationXYZ> ThreeMachineCalibration)
+        public Dto_Delta CalibrationCubeCalibrate(Dto_CameraOperation operation, List<List<double>> listEquations, List<LocationXYZ> ThreeMachineCalibration)
         {
+
             Dto_Delta dto_Delta = new Dto_Delta();
             if (ThreeMachineCalibration != null && ThreeMachineCalibration.Count > 0)
             {
                 List<LocationXYZ> locationXYZ = ThreeMachineCalibration;
 
-                List<List<double>> ss = locationXYZ.Select((f, i) => new List<double>
+                List<List<double>> PhysicalCoordinates = locationXYZ.Select((f, i) => new List<double>
                     {
                         f.X,
                         f.Y,
@@ -66,12 +72,12 @@ namespace JancsiVisionUtilityServers
                         //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
                         //All python objects should be declared as dynamic type.
                         dynamic calib = Py.Import("calibration");
-                     
-                        dynamic calibrationArray = calib.Calibrate(listEquations, ss);
-                        // var gg = calibrationArray.ToPython();
+
+                        dynamic calibrationArray = calib.Calibrate(listEquations, PhysicalCoordinates);
+
                         //IEnumerable rest = calibrationArray.Rest;
                         List<List<double>> lisAffineMatrix = new List<List<double>>();
-                        //string strPonit = calibrationArray.GetItem(0).ToString();
+
                         foreach (var item in calibrationArray)
                         {
                             List<double> listDou = new List<double>();
@@ -84,9 +90,8 @@ namespace JancsiVisionUtilityServers
                         }
                         dto_Delta.listEqutions = lisAffineMatrix;
 
-                           //结束计时
-                           // Console.WriteLine(stopwatch.Elapsed);
-                           // Console.ReadKey();
+                        //保存到配置文件
+                        _fileCongfigServer.SaveAffineMatrixConfig(operation.Name, operation.SerialNumber, lisAffineMatrix);
                     }
 
                 }
@@ -109,11 +114,11 @@ namespace JancsiVisionUtilityServers
             {
                 //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
                 //All python objects should be declared as dynamic type.
-                Stopwatch stopwatch = new Stopwatch();
+
                 dynamic calib = Py.Import("calibration");
-                stopwatch.Start();
+
                 dynamic calibrationArray = calib.CubeFitting(lissPoint);
-                // var gg = calibrationArray.ToPython();
+
                 //IEnumerable rest = calibrationArray.Rest;
 
                 string strPonit = calibrationArray.GetItem(0).ToString();
@@ -150,59 +155,203 @@ namespace JancsiVisionUtilityServers
                 dto_Delta.listEqutions = lissEquations;
                 dto_Delta.dtoCameraList = dto_PointCloud;
 
-                // CalibrationCubeCalibrate(lissDou, null);
-
-                stopwatch.Stop();                             //结束计时
-                //Console.WriteLine("算法用时", stopwatch.Elapsed);
-                //Console.ReadKey();
             }
             return dto_Delta;
         }
+        #region 点云算法
+        ///// <summary>
+        ///// 点云融合
+        ///// </summary>
+        ///// <param name="DicCameraAndPoint"></param>
+        ///// <returns></returns>
+        ///// <exception cref="NotImplementedException"></exception>
+        //public Dto_Delta fusionPointClouds(Dictionary<Dto_CameraOperation, Dto_PointCloud> DicCameraAndPoint)
+        //{
+        //    //    List<List<double>> pointsA = new List<List<double>>();
+        //    //    pointsA.Add(new List<double>() { 1.76435536, -0.62500892, 0.10972233, -14.86004 });
+        //    //    pointsA.Add(new List<double>() { 0.63284402, 1.70918776, -0.44023879, -50.66088782 });
+        //    //    pointsA.Add(new List<double>() { 0.0467290115, 0.451293596, 1.81927867, 593.409915 });
 
-        /// <summary>
-        /// 点云融合
-        /// </summary>
-        /// <param name="DicCameraAndPoint"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Dto_PointCloud fusionPointClouds(Dictionary<Dto_CameraOperation, Dto_PointCloud> DicCameraAndPoint)
+
+        //    //    List<List<double>> pointsB = new List<List<double>>();
+        //    //    pointsB.Add(new List<double>() { -1.05771195, 0.94722754, -1.2245939, -2.52334388 });
+        //    //    pointsB.Add(new List<double>() { -1.54750176, -0.60286345, 0.87029831, 100.97457192 });
+        //    //    pointsB.Add(new List<double>() { 0.0459242287, 1.50164588, 1.12186268, -72.1171435 });
+
+        //    //List<List<double>> pointsC = new List<List<double>>();
+        //    //pointsC.Add(new List<double>() { 84.134614109993, 249.198717951775, -250.586700439453, });
+        //    //pointsC.Add(new List<double>() { 88.14102435112, 249.198717951775, -250.538635253906, });
+
+        //    List<List<List<double>>> listAffineMatrix = new List<List<List<double>>>();
+        //    List<List<List<double>>> listAllPouint = new List<List<List<double>>>();
+
+        //    //listAllPouint.Add(pointsC);
+
+        //    Dto_PointCloud dicPoint = new Dto_PointCloud();
+        //    foreach (Dto_CameraOperation item in DicCameraAndPoint.Keys)
+        //    {
+        //        //if (item.SerialNumber.Contains("93906"))
+        //        //{
+
+        //        //    listAffineMatrix.Add(pointsB);
+        //        //}
+        //        //else
+        //        //{
+        //        //    listAffineMatrix.Add(pointsA);
+        //        //}
+        //        listAffineMatrix.Add(new List<List<double>>() { item._CameraAffineMatrixl.X, item._CameraAffineMatrixl.Y, item._CameraAffineMatrixl.Z, item._CameraAffineMatrixl.K });
+        //        listAllPouint.Add(TransformationStructure3D(DicCameraAndPoint[item].point3Ds));
+        //    }
+        //    List<List<double>> lissEquations = new List<List<double>>();
+        //    Dto_Delta dto_Delta = new Dto_Delta();
+        //    using (Py.GIL())
+        //    {
+        //        //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
+        //        //All python objects should be declared as dynamic type.
+
+        //        dynamic calib = Py.Import("concatenate");
+
+        //        var AfterFusionPoint = calib.Concatenate(listAllPouint, listAffineMatrix);
+
+        //        foreach (var strPintEquations in AfterFusionPoint)
+        //        {
+        //            List<double> listDou = new List<double>();
+        //            string[] strEqution = strPintEquations.ToString().Replace("[", "").Replace("]", "").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        //            foreach (string strDou in strEqution)
+        //            {
+        //                listDou.Add(Convert.ToDouble(strDou));
+        //            }
+        //            lissEquations.Add(listDou);
+        //        }
+        //        dto_Delta.listEqutions = lissEquations;
+        //        dto_Delta.dtoCameraList.point3Ds = TransformationStructure3D(lissEquations);            //结束计时
+
+        //    }
+        //    return dto_Delta;
+        //}
+        #endregion
+        public Dto_Delta fusionPointClouds(Dictionary<Dto_CameraOperation, Dto_PointCloud> DicCameraAndPoint)
         {
-            List<List<double>> pointsA = new List<List<double>>();
-            pointsA.Add(new List<double>() { 48.0769219398499, 249.198717951775, -242.709350585938 });
-            pointsA.Add(new List<double>() { 92.147434592247, 249.198717951775, -251.451873779297 });
+
+            List<List<double>> lissEquations = new List<List<double>>();
+            Dto_Delta dto_Delta = new Dto_Delta();
+            dto_Delta.dtoCameraList = new Dto_PointCloud();
+            double[,] listAffineMatrixXYZ = new double[3, 3];
+            double[] listAffineMatrixK = new double[3];
 
 
-            List<List<double>> pointsB = new List<List<double>>();
-            pointsB.Add(new List<double>() { 76.121793627739, 249.198717951775, -248.274230957031 });
-            pointsB.Add(new List<double>() { 101.762819170952, 249.198717951775, -253.935241699219 });
+            // List<List<List<double>>> listAllPouint = new List<List<List<double>>>();
 
-            List<List<double>> pointsC = new List<List<double>>();
-            pointsC.Add(new List<double>() { 84.134614109993, 249.198717951775, -250.586700439453 });
-            pointsC.Add(new List<double>() { 88.14102435112, 249.198717951775, -250.538635253906 });
-
-            List<List<List<double>>> listAllPouint = new List<List<List<double>>>();
-            listAllPouint.Add(pointsA);
-            listAllPouint.Add(pointsB);
-            listAllPouint.Add(pointsC);
-
-            Dto_PointCloud dicPoint = new Dto_PointCloud();
-
-            using (Py.GIL())
+            Matrix<double> Point = null;
+            Matrix<double> RMatrix = null;
+            Vector<double> TMatrix = null;
+            Matrix<double> p_prime = null;
+            foreach (Dto_CameraOperation item in DicCameraAndPoint.Keys)
             {
-                //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
-                //All python objects should be declared as dynamic type.
-                Stopwatch stopwatch = new Stopwatch();
-                //string strpth = Environment.CurrentDirectory + @"\pyd\";
-                dynamic calib = Py.Import("concatenate");
-                stopwatch.Start();
-                var AfterFusionPoint = calib.Concatenate(listAllPouint);
-                stopwatch.Stop();                             //结束计时
-                //Console.WriteLine(stopwatch.Elapsed);
-                //Console.ReadKey();
-            }
-            return dicPoint;
-        }
 
+                if (item._CameraAffineMatrixl.Matrix != null && item._CameraAffineMatrixl.Matrix.Count > 0)
+                {
+                    listAffineMatrixK[0] = item._CameraAffineMatrixl.Matrix[0][3];
+                    listAffineMatrixK[1] = item._CameraAffineMatrixl.Matrix[1][3];
+                    listAffineMatrixK[2] = item._CameraAffineMatrixl.Matrix[2][3];
+
+                    for (int i = 0; i < listAffineMatrixXYZ.GetLength(0); i++) //遍历第一维
+                    {
+                        for (int j = 0; j < listAffineMatrixXYZ.GetLength(1); j++) //遍历第二维
+                        {
+                            listAffineMatrixXYZ[i, j] = item._CameraAffineMatrixl.Matrix[i][j];//为数组赋值
+                        }
+
+                    }
+
+                }
+                double[,] listPoints = new double[DicCameraAndPoint[item].point3Ds.Count, 3];
+
+                for (int i = 0; i < listPoints.GetLength(0); i++) //遍历第一维
+                {
+                    for (int j = 0; j < listPoints.GetLength(1); j++) //遍历第二维
+                    {
+
+                        switch (j)
+                        {
+                            case 0:
+                                listPoints[i, j] = DicCameraAndPoint[item].point3Ds[i].X;
+                                break;
+                            case 1:
+                                listPoints[i, j] = DicCameraAndPoint[item].point3Ds[i].Y;
+                                break;
+                            case 2:
+                                listPoints[i, j] = DicCameraAndPoint[item].point3Ds[i].Z;
+                                break;
+                            default:
+                                break;
+                        }//为数组赋值
+                    }
+
+                }
+                Point = DenseMatrix.OfArray(listPoints);
+                RMatrix = DenseMatrix.OfArray(listAffineMatrixXYZ);
+                TMatrix = DenseVector.OfArray(listAffineMatrixK);
+                p_prime = RMatrix * Point.Transpose();
+                p_prime = p_prime.Transpose();
+
+
+
+                Vector<double> rowbfr = Vector<double>.Build.Dense(3);
+
+                for (int i = 0; i < p_prime.RowCount; i++)
+                {
+                    p_prime.Row(i, rowbfr);
+                    rowbfr.Add(TMatrix, rowbfr);
+                    p_prime.SetRow(i, rowbfr);
+
+                }
+                //收集点云
+                //int mark = 1;
+                //List<double> doublesPoint = new List<double>();
+                //foreach (var ArrayPont in p_prime.ToArray())
+                //{
+
+                //    doublesPoint.Add(ArrayPont);
+                //    if (mark % 3 == 0)
+                //    {
+                //        lissEquations.Add(doublesPoint);
+                //        doublesPoint = new List<double>();
+                //    }
+                //    mark++;
+                //}
+
+
+                var leng = p_prime.ToArray();
+                //  List<List<double>> result = Enumerable.Range(0, p_prime.ToArray().Length / 3).Select(x => p_prime.Enumerate().Skip(x * 3).Take(3).ToList()).ToList();
+                // lissEquations = result;
+                try
+                {
+                    for (int i = 0; i < leng.GetLength(0); i++) //遍历第一维
+                    {
+                        List<double> doublesPoint = new List<double>();
+                        for (int j = 0; j < leng.GetLength(1); j++) //遍历第二维
+                        {
+                            doublesPoint.Add(leng[i, j]);
+
+
+                        }
+                        lissEquations.Add(doublesPoint);
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+
+            }
+            dto_Delta.listEqutions = lissEquations;
+            dto_Delta.dtoCameraList.point3Ds = TransformationStructure3D(lissEquations);            //结束计时
+            return dto_Delta;
+        }
 
         /// <summary>
         /// 6DoF误差计
@@ -211,9 +360,28 @@ namespace JancsiVisionUtilityServers
         /// <param name="rotateMatrix"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Dto_PointCloud rotatePointCloud(Dto_PointCloud origin, Dto_RotateMatrix rotateMatrix)
+        public List<double> rotatePointCloud(Dto_Delta refPointsCloud, Dto_Delta currentPointsCloud)
         {
-            throw new NotImplementedException();
+            List<double> Dof6 = new List<double>();
+            using (Py.GIL())
+            {
+                //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
+                //All python objects should be declared as dynamic type.
+
+                dynamic calib = Py.Import("six_dof");
+
+                dynamic AfterErrorValue = calib.SixDofCalculate(refPointsCloud.listEqutions, currentPointsCloud.listEqutions);
+
+                string strAfterErrorValue = AfterErrorValue.GetItem(0).ToString();
+                foreach (var strPintEquations in AfterErrorValue)
+                {
+
+                    Dof6.Add(Convert.ToDouble(strPintEquations.ToString()));
+
+
+                }
+            }
+            return Dof6;
         }
 
         /// <summary>

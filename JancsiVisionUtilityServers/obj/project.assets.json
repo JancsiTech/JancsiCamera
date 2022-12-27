@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     ".NETStandard,Version=v2.0": {
+      "MathNet.Numerics/5.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/MathNet.Numerics.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/MathNet.Numerics.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
         "type": "package",
         "dependencies": {
@@ -201,6 +214,28 @@
     }
   },
   "libraries": {
+    "MathNet.Numerics/5.0.0": {
+      "sha512": "pg1W2VwaEQMAiTpGK840hZgzavnqjlCMTVSbtVCXVyT+7AX4mc1o89SPv4TBlAjhgCOo9c1Y+jZ5m3ti2YgGgA==",
+      "type": "package",
+      "path": "mathnet.numerics/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/net461/MathNet.Numerics.dll",
+        "lib/net461/MathNet.Numerics.xml",
+        "lib/net48/MathNet.Numerics.dll",
+        "lib/net48/MathNet.Numerics.xml",
+        "lib/net5.0/MathNet.Numerics.dll",
+        "lib/net5.0/MathNet.Numerics.xml",
+        "lib/net6.0/MathNet.Numerics.dll",
+        "lib/net6.0/MathNet.Numerics.xml",
+        "lib/netstandard2.0/MathNet.Numerics.dll",
+        "lib/netstandard2.0/MathNet.Numerics.xml",
+        "mathnet.numerics.5.0.0.nupkg.sha512",
+        "mathnet.numerics.nuspec"
+      ]
+    },
     "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
       "sha512": "UcSjPsst+DfAdJGVDsu346FX0ci0ah+lw3WRtn18NUwEqRt70HaOQ7lI72vy3+1LxtqI3T5GWwV39rQSrCzAeg==",
       "type": "package",
@@ -617,6 +652,7 @@
       "JancsiVisionConfigServices >= 1.0.0",
       "JancsiVisionLogServers >= 1.0.0",
       "JancsiVisionPointCloudServers >= 1.0.0",
+      "MathNet.Numerics >= 5.0.0",
       "Microsoft.CSharp >= 4.7.0",
       "NETStandard.Library >= 2.0.3",
       "pythonnet_py39_win >= 2.5.2"
@@ -675,6 +711,10 @@
       "netstandard2.0": {
         "targetAlias": "netstandard2.0",
         "dependencies": {
+          "MathNet.Numerics": {
+            "target": "Package",
+            "version": "[5.0.0, )"
+          },
           "Microsoft.CSharp": {
             "target": "Package",
             "version": "[4.7.0, )"

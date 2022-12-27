@@ -10,13 +10,13 @@ namespace JancsiVisionUtilityServers
     public interface IJancsiUtilityServer
     {
         //# point clouds fusion
-        Dto_PointCloud fusionPointClouds(Dictionary<Dto_CameraOperation, Dto_PointCloud> DicCameraAndPoint);
+        Dto_Delta fusionPointClouds(Dictionary<Dto_CameraOperation, Dto_PointCloud> DicCameraAndPoint);
 
-        Dto_PointCloud rotatePointCloud(Dto_PointCloud origin, Dto_RotateMatrix rotateMatrix);
+        List<double> rotatePointCloud(Dto_Delta origin, Dto_Delta rotateMatrix);
 
-        Dto_Delta CalibrationCubeCalibrate(List<List<double>> listEquations, List<LocationXYZ> ThreeMachineCalibration);
+        Dto_Delta CalibrationCubeCalibrate(Dto_CameraOperation operation,List<List<double>> listEquations, List<LocationXYZ> ThreeMachineCalibration);
 
-        Dto_Delta CalibrationCubeFitting(Dto_PointCloud dtoPointCloud); 
+        Dto_Delta CalibrationCubeFitting(Dto_PointCloud dtoPointCloud);
 
     }
 }

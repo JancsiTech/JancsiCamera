@@ -78,8 +78,12 @@ namespace JancsiVisionCameraServers.Model
         /// <summary>
         /// 相机物理坐标
         /// </summary>
-        public List<LocationXYZ> _ThreeMachineCalibration;
+        public List<LocationXYZ> _ThreeMachineCalibration { get; set; }
         //Matrix affineMatrix; // persist on disk read from disk at loading time
+        /// <summary>
+        /// 相机物理坐标
+        /// </summary>
+        public RTTwoDimensionalMatrix _CameraAffineMatrixl { get; set; }
 
     }
     public class Capture

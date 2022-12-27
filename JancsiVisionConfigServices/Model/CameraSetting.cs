@@ -38,6 +38,7 @@ namespace JancsiVisionConfigServices.Model
         RegionExtract _RegionExtract;
         bool _IsAvailable;
         List<LocationXYZ> _ThreeMachineCalibration;
+        RTTwoDimensionalMatrix _CameraAffineMatrixl;
         public CameraSetting()
         {
             Capture = new Capture();
@@ -48,6 +49,8 @@ namespace JancsiVisionConfigServices.Model
             RegionExtract = new RegionExtract();
             IsAvailable = false;
             _ThreeMachineCalibration = new List<LocationXYZ>();
+            _CameraAffineMatrixl = new RTTwoDimensionalMatrix();
+
         }
         [Newtonsoft.Json.JsonIgnore]
         public bool IsAvailable { get { return _IsAvailable; } set { _IsAvailable = value; } }
@@ -61,7 +64,11 @@ namespace JancsiVisionConfigServices.Model
         public RegionExtract RegionExtract { get { return _RegionExtract; } set { _RegionExtract = value; } }
 
         public List<LocationXYZ> ThreeMachineCalibration { get { return _ThreeMachineCalibration; } set { _ThreeMachineCalibration = value; } }
-        
+
+        public RTTwoDimensionalMatrix CameraAffineMatrixl { get { return _CameraAffineMatrixl; } set { _CameraAffineMatrixl = value; } }
+
+
+
     }
     public enum Compression
     {
@@ -189,6 +196,13 @@ namespace JancsiVisionConfigServices.Model
         public double X { get { return _X; } set { _X = value; } }
         public double Y { get { return _Y; } set { _Y = value; } }
         public double Z { get { return _Z; } set { _Z = value; } }
+
+    }
+    public class RTTwoDimensionalMatrix
+    {
+
+        List<List<double>> _Matrix;
+        public List<List<double>> Matrix { get { return _Matrix; } set { _Matrix = value; } }
 
     }
 }

@@ -17,5 +17,10 @@ namespace JancsiVisionConfigServices
         {
             throw new NotImplementedException();
         }
+
+        public void SaveAffineMatrixConfig(string cameraname, string SerialNumber, List<List<double>> lisMatrixl)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
