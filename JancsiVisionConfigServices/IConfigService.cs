@@ -11,5 +11,7 @@ namespace JancsiVisionConfigServices
         CameraConfig GetEnvironmentConfig(string name);
 
         void SaveAffineMatrixConfig(string cameraname, string SerialNumber, List<List<double>> lisMatrixl);
+
+        void SaveConfig(string Name, string SerialNumber, int uuid);
     }
 }

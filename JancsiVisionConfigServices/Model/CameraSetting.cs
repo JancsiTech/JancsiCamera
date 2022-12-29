@@ -79,7 +79,7 @@ namespace JancsiVisionConfigServices.Model
     {
 
         float _ImagesCount = 24;
-        double _ExposureLevel = 1.1;
+        int _ExposureLevel = 1000;
         bool _EnableLowExposure = false;
         int _LowExposureLevel = 1000;
         bool _EnableHighExposure = false;
@@ -87,7 +87,7 @@ namespace JancsiVisionConfigServices.Model
         Compression _Compress = Compression.Low;
 
         public float ImagesCount { get { return _ImagesCount; } set { _ImagesCount = value; } }
-        public double ExposureLevel { get { return _ExposureLevel; } set { _ExposureLevel = value; } }
+        public int ExposureLevel { get { return _ExposureLevel; } set { _ExposureLevel = value; } }
         public bool EnableLowExposure { get { return _EnableLowExposure; } set { _EnableLowExposure = value; } }
         public int LowExposureLevel { get { return _LowExposureLevel; } set { _LowExposureLevel = value; } }
         public bool EnableHighExposure { get { return _EnableHighExposure; } set { _EnableHighExposure = value; } }

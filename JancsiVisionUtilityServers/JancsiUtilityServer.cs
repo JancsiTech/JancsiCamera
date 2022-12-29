@@ -17,14 +17,25 @@ using Newtonsoft.Json.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using System.Numerics;
+using System.Runtime.InteropServices;
+using static System.Net.Mime.MediaTypeNames;
+using System.Net.Http.Headers;
 
 namespace JancsiVisionUtilityServers
 {
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class JancsiUtilityServer : IJancsiUtilityServer
     {
         private readonly ILogProvider log;
+
         private readonly IConfigService config;
+
         private FileCongfigServer _fileCongfigServer;
+
+        [DllImport("libSixDof.dll", EntryPoint = "SixDofCalculate", CallingConvention = CallingConvention.Cdecl)]
+        extern static void SixDofCalculate(double[] refPoints, int refPointsNumber, double[] currentPoints, int currentPointsNumber, double[] resData);
+
+
         public JancsiUtilityServer()
         {
             _fileCongfigServer = new FileCongfigServer();
@@ -51,7 +62,7 @@ namespace JancsiVisionUtilityServers
         /// <param name="dtoPointCloud"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Dto_Delta CalibrationCubeCalibrate(Dto_CameraOperation operation, List<List<double>> listEquations, List<LocationXYZ> ThreeMachineCalibration)
+        public Dto_Delta CalibrationCubeCalibrate(string Name,string SerialNumber, List<List<double>> listEquations, List<LocationXYZ> ThreeMachineCalibration)
         {
 
             Dto_Delta dto_Delta = new Dto_Delta();
@@ -91,7 +102,7 @@ namespace JancsiVisionUtilityServers
                         dto_Delta.listEqutions = lisAffineMatrix;
 
                         //保存到配置文件
-                        _fileCongfigServer.SaveAffineMatrixConfig(operation.Name, operation.SerialNumber, lisAffineMatrix);
+                        _fileCongfigServer.SaveAffineMatrixConfig(Name, SerialNumber, lisAffineMatrix);
                     }
 
                 }
@@ -352,7 +363,15 @@ namespace JancsiVisionUtilityServers
             dto_Delta.dtoCameraList.point3Ds = TransformationStructure3D(lissEquations);            //结束计时
             return dto_Delta;
         }
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public struct ResData
+        {
 
+            //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
+            public IntPtr data6dofAndMag;
+
+        }
+        private delegate void CloseDevDelegate();
         /// <summary>
         /// 6DoF误差计
         /// </summary>
@@ -360,30 +379,106 @@ namespace JancsiVisionUtilityServers
         /// <param name="rotateMatrix"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
+
         public List<double> rotatePointCloud(Dto_Delta refPointsCloud, Dto_Delta currentPointsCloud)
         {
-            List<double> Dof6 = new List<double>();
-            using (Py.GIL())
-            {
-                //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
-                //All python objects should be declared as dynamic type.
 
-                dynamic calib = Py.Import("six_dof");
+            //using (Py.GIL())
+            //{
+            //    //Import python modules using dynamic mod = Py.Import("mod"), then you can call functions as normal.
+            //    //All python objects should be declared as dynamic type.
 
-                dynamic AfterErrorValue = calib.SixDofCalculate(refPointsCloud.listEqutions, currentPointsCloud.listEqutions);
+            //    dynamic calib = Py.Import("six_dof");
 
-                string strAfterErrorValue = AfterErrorValue.GetItem(0).ToString();
-                foreach (var strPintEquations in AfterErrorValue)
-                {
+            //    dynamic AfterErrorValue = calib.SixDofCalculate(refPointsCloud.listEqutions, currentPointsCloud.listEqutions);
 
-                    Dof6.Add(Convert.ToDouble(strPintEquations.ToString()));
+            //    string strAfterErrorValue = AfterErrorValue.GetItem(0).ToString();
+            //    foreach (var strPintEquations in AfterErrorValue)
+            //    {
+
+            //        Dof6.Add(Convert.ToDouble(strPintEquations.ToString()));
 
 
-                }
-            }
-            return Dof6;
+            //    }
+            //}
+            // List<double> sssss = refPointsCloud.listEqutions.Where(o => true).ToList();
+            //if (this.InvokeRequired)
+            //{
+            //    CloseDevDelegate closeDev = new CloseDevDelegate(CloseDev);
+            //    this.BeginInvoke(closeDev);
+            //}
+            //else
+            //{
+            //    Program.DEVICE.CloseDev();
+            //}
+            List<double> refPointsClouds = refPointsCloud.listEqutions.SelectMany(i => i).Distinct().ToList();
+            List<double> currentPointsClouds = currentPointsCloud.listEqutions.SelectMany(i => i).Distinct().ToList();
+
+            double[] refPoints = refPointsClouds.Cast<double>().ToArray();
+            int refPointsNumber = refPointsClouds.Count;
+            double[] currentPoints = currentPointsClouds.Cast<double>().ToArray();
+            int currentPointsNumber = currentPointsClouds.Count();
+            ResData resData = new ResData();
+            resData.data6dofAndMag = ArrayToIntptr(new double[7]);
+
+            double[] double6Dof = new double[7];
+            //IntPtr refPointsIndouble6Dof = ArrayToIntptr(double6Dof);
+            ////指针转换
+            // IntPtr refPointsIn = ArrayToIntptr(refPoints);
+            // IntPtr currentPointsIn = ArrayToIntptr(currentPoints);
+
+            //IntPtr refPointsIn = new IntPtr();
+            //Marshal.Copy(refPoints, 0, refPointsIn, refPoints.Length);
+            //Marshal.Copy(currentPoints, 0, currentPointsIn, currentPoints.Length);
+
+            SixDofCalculate(refPoints, refPointsNumber / 3, currentPoints, currentPointsNumber / 3, double6Dof);
+            //if (resData.data6dofAndMag != null && resData.data6dofAndMag.Count() > 0)
+            //{
+            //    Dof6 = resData.data6dofAndMag.ToList();
+            //}
+            //var sss = IntPtrToStruct<double[]>(resData.data6dofAndMag);
+            //Marshal.ReleaseComObject(refPointsIn);
+            //Marshal.ReleaseComObject(currentPointsIn);
+            //public static void Copy(IntPtr source, double[] destination, int startIndex, int length);
+
+            // Marshal.Copy(resData.data6dofAndMag, double6Dof, 0, 7);
+            return double6Dof.ToList();
         }
 
+        public static T IntPtrToStruct<T>(IntPtr info)
+        {
+            return (T)Marshal.PtrToStructure(info, typeof(T));
+        }
+        static IntPtr ArrayToIntptr(double[] source)
+
+        {
+
+            if (source == null)
+
+            {
+
+                return IntPtr.Zero;
+
+            }
+
+
+            unsafe
+
+            {
+
+                fixed (double* point = source)
+
+                {
+
+                    IntPtr ptr = new IntPtr(point);
+
+                    return ptr;
+
+                }
+
+            }
+
+        }
         /// <summary>
         /// 
         /// </summary>

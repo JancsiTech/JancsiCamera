@@ -26,7 +26,7 @@ namespace JancsiVisionCameraServers.Model
         public string SerialNumber;
 
         //GPU加速显卡名称 例： [0] NVIDIA GeForce RTX 3090"; // Change this to "[0] GeForce GTX 1080" for example.
-        public string cudaDeviceString = "";
+        public string cudaDeviceString = null;
 
         /// <summary>
         /// 相机名称-同系列产品可能相同 # not null

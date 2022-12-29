@@ -52,6 +52,12 @@ namespace JancsiVisionCameraController
             }
             return dicPin;
         }
-
+        /// <summary>
+        /// 关闭相机链接
+        /// </summary>
+        public void DisConnectCamera()
+        {
+            cameraControl.disconnectAll();
+        }
     }
 }

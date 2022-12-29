@@ -22,5 +22,10 @@ namespace JancsiVisionConfigServices
         {
             throw new NotImplementedException();
         }
+
+        public void SaveConfig(string Name, string SerialNumber, int uuid)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -81,7 +81,7 @@ namespace JancsiVisionCameraServers
         /// <returns></returns>
         public Dictionary<Dto_CameraOperation, List<Point3D>> connect()
         {
-            _config.GetCameraConfig(_CameraOperation.SerialNumber);
+            //_config.GetCameraConfig(_CameraOperation.SerialNumber);
             _CloudData = new List<Point3D>();
 
             try
@@ -416,14 +416,13 @@ namespace JancsiVisionCameraServers
                         if (ChoseCameraSetting != null)
                         {
                             #region chage option data
-                            _CameraOperation.Capture.ExposureLevel = ChoseCameraSetting.Capture.ExposureLevel;
+                            _CameraOperation.Capture.ExposureLevel = ChoseCameraSetting.Capture.ExposureLevel * 0.1 / 100;
                             _CameraOperation.Capture.EnableHighExposure = ChoseCameraSetting.Capture.EnableHighExposure;
                             _CameraOperation.Capture.EnableLowExposure = ChoseCameraSetting.Capture.EnableLowExposure;
                             _CameraOperation.Capture.HighExposureLevel = ChoseCameraSetting.Capture.HighExposureLevel;
                             _CameraOperation.Capture.LowExposureLevel = ChoseCameraSetting.Capture.LowExposureLevel;
                             _CameraOperation.Capture.ImagesCount = int.Parse(ChoseCameraSetting.Capture.ImagesCount.ToString());
                             _CameraOperation.Capture.Compress = (JancsiVisionCameraServers.Model.Compression)Enum.Parse(typeof(JancsiVisionCameraServers.Model.Compression), ChoseCameraSetting.Capture.Compress.ToString(), true);
-                            _CameraOperation.Capture.ExposureLevel = ChoseCameraSetting.Capture.ExposureLevel;
                             _CameraOperation.ROI.Height = ChoseCameraSetting.ROI.Height;
                             _CameraOperation.ROI.Width = ChoseCameraSetting.ROI.Width;
                             _CameraOperation.ROI.Camera1OffsetX = ChoseCameraSetting.ROI.Camera1OffsetX;
@@ -448,6 +447,15 @@ namespace JancsiVisionCameraServers
                             #endregion
 
                         }
+                        else
+                        {
+                            _config.SaveConfig(_CameraOperation.Name, _CameraOperation.SerialNumber, _CameraOperation.uuid);
+                        }
+                    }
+                    else
+                    {
+                        //配置文件不存在或者不存在相关相机配置
+                        _config.SaveConfig(_CameraOperation.Name, _CameraOperation.SerialNumber, _CameraOperation.uuid);
                     }
                 }
 
