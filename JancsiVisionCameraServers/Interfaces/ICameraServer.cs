@@ -43,7 +43,7 @@ namespace JancsiVisionCameraServers.Interfaces
         /// 设置相机配置
         /// </summary>
         /// <returns></returns>
-        bool setCameraConfig();
+        bool setCameraConfig(JancsiVisionConfigServices.Model.CameraConfig cameraConfig);
 
         /// <summary>
         /// 获取ROI配置

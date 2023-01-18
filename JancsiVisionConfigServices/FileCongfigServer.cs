@@ -5,99 +5,31 @@ using System.IO;
 using System.Linq;
 using JancsiVisionConfigServices.Model;
 using Newtonsoft.Json;
+using static JancsiVisionConfigServices.Model.CameraCalibrationSetting;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Xml.Linq;
+using System.Net.Http.Headers;
 
 namespace JancsiVisionConfigServices
 {
     public class FileCongfigServer : IConfigService
     {
         public string FilePath { get; set; }
-        private List<LocationXYZ> location0XYZs;
-        private List<LocationXYZ> location90XYZs;
-        private List<LocationXYZ> location180XYZs;
+
 
         private string path;
+
+        private string Calibrationpath;
+
+        public CalibrationSettings _configCalibration;
+
+
         public FileCongfigServer()
         {
-            #region 物理坐标
-            location0XYZs = new List<LocationXYZ>();
-            location90XYZs = new List<LocationXYZ>();
-            location180XYZs = new List<LocationXYZ>();
+            path = System.IO.Path.Combine(Environment.CurrentDirectory, "Config", "Camera.json");
 
-            LocationXYZ pos00 = new LocationXYZ();
-            pos00.X = 0.0;
-            pos00.Y = -106.06601717798122;
-            pos00.Z = 150.0;
-
-            LocationXYZ pos01 = new LocationXYZ();
-            pos00.X = -106.06601717798122;
-            pos00.Y = 0.0;
-            pos00.Z = 150.0;
-
-            LocationXYZ pos02 = new LocationXYZ();
-            pos00.X = 106.06601717798122;
-            pos00.Y = 0.0;
-            pos00.Z = 150.0;
-            LocationXYZ pos03 = new LocationXYZ();
-            pos00.X = 0.0;
-            pos00.Y = -106.06601717798122;
-            pos00.Z = 0.0;
-            location0XYZs.Add(pos00);
-            location0XYZs.Add(pos01);
-            location0XYZs.Add(pos02);
-            location0XYZs.Add(pos03);
-
-            LocationXYZ pos90oc0 = new LocationXYZ();
-            pos90oc0.X = -106.06601717798122;
-            pos90oc0.Y = 0.0;
-            pos90oc0.Z = 150.0;
-
-            LocationXYZ pos90oc1 = new LocationXYZ();
-            pos90oc1.X = 0.0;
-            pos90oc1.Y = 106.06601717798122;
-            pos90oc1.Z = 150.0;
-
-            LocationXYZ pos90oc2 = new LocationXYZ();
-            pos90oc2.X = 0.0;
-            pos90oc2.Y = -106.06601717798122;
-            pos90oc2.Z = 150.0;
-
-            LocationXYZ pos90oc3 = new LocationXYZ();
-            pos90oc3.X = -106.06601717798122;
-            pos90oc3.Y = 0.0;
-            pos90oc3.Z = 0.0;
-
-            location90XYZs.Add(pos90oc0);
-            location90XYZs.Add(pos90oc1);
-            location90XYZs.Add(pos90oc2);
-            location90XYZs.Add(pos90oc3);
-
-            LocationXYZ pos180oc0 = new LocationXYZ();
-            pos00.X = 106.06601717798122;
-            pos00.Y = 0.0;
-            pos00.Z = 150.0;
-
-            LocationXYZ pos180oc1 = new LocationXYZ();
-            pos00.X = 0.0;
-            pos00.Y = -106.06601717798122;
-            pos00.Z = 150.0;
-
-            LocationXYZ pos180oc2 = new LocationXYZ();
-            pos00.X = 0.0;
-            pos00.Y = 106.06601717798122;
-            pos00.Z = 150.0;
-
-            LocationXYZ pos180oc3 = new LocationXYZ();
-            pos00.X = 106.06601717798122;
-            pos00.Y = 0.0;
-            pos00.Z = 0.0;
-
-            location180XYZs.Add(pos180oc0);
-            location180XYZs.Add(pos180oc1);
-            location180XYZs.Add(pos180oc2);
-            location180XYZs.Add(pos180oc3);
-
-            #endregion
-             path = System.IO.Path.Combine(Environment.CurrentDirectory, "Config", "Camera.json");
+            Calibrationpath = System.IO.Path.Combine(Environment.CurrentDirectory, "Config", "CameraCalibrationSetting.json");
         }
         /// <summary>
         /// 可以从文件中读取默认相机配置
@@ -125,7 +57,6 @@ namespace JancsiVisionConfigServices
             //{
             //    return null;
             //}
-            string path = System.IO.Path.Combine(Environment.CurrentDirectory, "Config", "Camera.json");
             CameraConfig config = new CameraConfig();
             if (System.IO.File.Exists(path))
             {
@@ -135,56 +66,91 @@ namespace JancsiVisionConfigServices
             return config;
 
         }
-        public void SaveAffineMatrixConfig(string CameraName, string SerialNumber, List<List<double>> lisMatrixl)
+
+        public CameraCalibrationSetting GetCameraCaCalibrationConfig(string Name, string SerialNumber)
         {
-            //List<List<double>> pointsA = new List<List<double>>();
-            //pointsA.Add(new List<double>() { 1.76435536, -0.62500892, 0.10972233, -14.86004 });
-            //pointsA.Add(new List<double>() { 0.63284402, 1.70918776, -0.44023879, -50.66088782 });
-            //pointsA.Add(new List<double>() { 0.0467290115, 0.451293596, 1.81927867, 593.409915 });
+            CameraCalibrationSetting cameraCalibrationSetting = new CameraCalibrationSetting();
+            if (_configCalibration == null)
+            {
+                _configCalibration = new CalibrationSettings();
+                if (System.IO.File.Exists(Calibrationpath))
+                {
+                    string jsonStr = File.ReadAllText(Calibrationpath, Encoding.UTF8);
+                    _configCalibration = Newtonsoft.Json.JsonConvert.DeserializeObject<CalibrationSettings>(jsonStr);
+                }
+            }
+
+            if (_configCalibration.CamerasCali != null && _configCalibration.CamerasCali.Count > 0)
+            {
+
+                cameraCalibrationSetting = _configCalibration.CamerasCali.Where(o => o.Name == Name && o.SerialNumber == SerialNumber).FirstOrDefault();
+
+            }
+            return cameraCalibrationSetting;
+
+        }
 
 
-            ////List<List<double>> pointsB = new List<List<double>>();
-            ////pointsB.Add(new List<double>() { -1.05771195, 0.94722754, -1.2245939, -2.52334388 });
-            ////pointsB.Add(new List<double>() { -1.54750176, -0.60286345, 0.87029831, 100.97457192 });
-            ////pointsB.Add(new List<double>() { 0.0459242287, 1.50164588, 1.12186268, -72.1171435 });
 
-            ////List<List<double>> pointsC = new List<List<double>>();
-            ////pointsC.Add(new List<double>() { 84.134614109993, 249.198717951775, -250.586700439453, });
-            ////pointsC.Add(new List<double>() { 88.14102435112, 249.198717951775, -250.538635253906, });
-
-            ////listAffineMatrix.Add(pointsA);
-            ////listAffineMatrix.Add(pointsA);
-            ////listAffineMatrix.Add(pointsA);
-
+        public void SaveAffineMatrixConfig(string CameraName, string SerialNumber, List<List<double>> lisMatrixl, int specification)
+        {
             try
             {
                 //从ini文件中获取
-             
-                CameraConfig config = new CameraConfig();
-                if (System.IO.File.Exists(path))
-                {
-                    string jsonStr = File.ReadAllText(path, Encoding.UTF8);
-                    config = Newtonsoft.Json.JsonConvert.DeserializeObject<CameraConfig>(jsonStr);
 
-                }
+                //CalibrationSettings configCalibration = new CalibrationSettings();
+                //if (System.IO.File.Exists(Calibrationpath))
+                //{
+                //    string jsonStr = File.ReadAllText(Calibrationpath, Encoding.UTF8);
+                //    configCalibration = Newtonsoft.Json.JsonConvert.DeserializeObject<CalibrationSettings>(jsonStr);
+                //}
 
-                CameraSetting ChoseCameraSetting = config.Cameras.Where(o => o.Name == CameraName && o.SerialNumber == SerialNumber).FirstOrDefault();
+                CameraCalibrationSetting ChoseCameraSetting = _configCalibration.CamerasCali.Where(o => o.Name == CameraName && o.SerialNumber == SerialNumber).FirstOrDefault();
+
+                var lisPsotions = _configCalibration.physicalCoordinateCalibrationSetting.Where(o => o.Coordinate == specification).FirstOrDefault().ThreeMachineCalibration[ChoseCameraSetting.CameraId];
+
+                ChoseCameraSetting.ThreeMachineCalibration = lisPsotions;
                 //CameraSetting ChoseCameraSetting = config.Cameras[0];
                 //修改外参矩阵配置
                 ChoseCameraSetting.CameraAffineMatrixl = new RTTwoDimensionalMatrix();
                 ChoseCameraSetting.CameraAffineMatrixl.Matrix = lisMatrixl;
-                //ChoseCameraSetting.CameraAffineMatrixl.Matrix2 = lisMatrixl[1];
-                //ChoseCameraSetting.CameraAffineMatrixl.Matrix3 = lisMatrixl[2];
+                //增加读取相机对应物理坐标信息
+                ChoseCameraSetting.CameraAffineMatrixlXyz = new RTTwoDimensionalMatrixXYZ();
+                ChoseCameraSetting.CameraAffineMatrixlXyz.listAffineMatrixXYZ = new double[3, 3];
+                ChoseCameraSetting.CameraAffineMatrixlK = new RTTwoDimensionalMatrixK();
+                ChoseCameraSetting.CameraAffineMatrixlK.listAffineMatrixK = new double[3];
 
-                string configString = Newtonsoft.Json.JsonConvert.SerializeObject(config);
-                //这里先加个创建文件好保存
-                if (!File.Exists(path))
+                if (ChoseCameraSetting.CameraAffineMatrixl != null && ChoseCameraSetting.CameraAffineMatrixl.Matrix != null && ChoseCameraSetting.CameraAffineMatrixl.Matrix.Count > 0)
                 {
-                    FileStream fs = File.Create(path);//创建文件
+                    ChoseCameraSetting.CameraAffineMatrixlK.listAffineMatrixK[0] = ChoseCameraSetting.CameraAffineMatrixl.Matrix[0][3];
+                    ChoseCameraSetting.CameraAffineMatrixlK.listAffineMatrixK[1] = ChoseCameraSetting.CameraAffineMatrixl.Matrix[1][3];
+                    ChoseCameraSetting.CameraAffineMatrixlK.listAffineMatrixK[2] = ChoseCameraSetting.CameraAffineMatrixl.Matrix[2][3];
+
+                    for (int i = 0; i < ChoseCameraSetting.CameraAffineMatrixlXyz.listAffineMatrixXYZ.GetLength(0); i++) //遍历第一维
+                    {
+                        for (int j = 0; j < ChoseCameraSetting.CameraAffineMatrixlXyz.listAffineMatrixXYZ.GetLength(1); j++) //遍历第二维
+                        {
+                            ChoseCameraSetting.CameraAffineMatrixlXyz.listAffineMatrixXYZ[i, j] = ChoseCameraSetting.CameraAffineMatrixl.Matrix[i][j];//为数组赋值
+                        }
+
+                    }
+
+                }
+                //配置物理坐标
+
+
+
+
+
+                string configString = Newtonsoft.Json.JsonConvert.SerializeObject(_configCalibration);
+                //这里先加个创建文件好保存
+                if (!File.Exists(Calibrationpath))
+                {
+                    FileStream fs = File.Create(Calibrationpath);//创建文件
                     fs.Close();
                 }
 
-                File.WriteAllLines(path, new string[] { configString }, Encoding.UTF8);
+                File.WriteAllLines(Calibrationpath, new string[] { configString }, Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -200,51 +166,126 @@ namespace JancsiVisionConfigServices
         /// <param name="Name"></param>
         /// <param name="SerialNumber"></param>
         /// <param name="uuid"></param>
-        public void SaveConfig(string Name,string SerialNumber, int uuid)
+        public void SaveConfig(string Name, string SerialNumber, int uuid)
         {
             try
             {
-                //从ini文件中获取
-                CameraConfig config = new CameraConfig();
-                if (!System.IO.File.Exists(path))
+
+                //Task<int> printRes = Task.Run(() =>
+                //{
+                //    #region 配置文件
+                //    CameraConfig config = new CameraConfig();
+                //    if (!System.IO.File.Exists(path))
+                //    {
+                //        FileStream fs = File.Create(path);//创建文件
+                //        fs.Close();
+                //    }
+
+                //    string jsonStr = File.ReadAllText(path, Encoding.UTF8);
+                //    config = Newtonsoft.Json.JsonConvert.DeserializeObject<CameraConfig>(jsonStr);
+
+                //    if (config.Cameras == null && config.Cameras.Count == 0)
+                //    {
+                //        config.Cameras = new System.Collections.ObjectModel.ObservableCollection<CameraSetting>();
+                //    }
+
+                //    CameraSetting cameraSettingNew = new CameraSetting();
+                //    cameraSettingNew.IsAvailable = false;
+                //    cameraSettingNew.Name = Name;
+                //    cameraSettingNew.SerialNumber = SerialNumber;
+                //    config.Cameras.Add(cameraSettingNew);
+                //    config.CurrentCamera = cameraSettingNew;
+
+                //    string configString = Newtonsoft.Json.JsonConvert.SerializeObject(config);
+
+                //    File.WriteAllLines(path, new string[] { configString }, Encoding.UTF8);
+                //    #endregion
+
+                //    return 1;
+
+                //});
+                Task<int> printCalibrationReslut = Task.Run(() =>
                 {
-                    FileStream fs = File.Create(path);//创建文件
-                    fs.Close();
-                }
-                string jsonStr = File.ReadAllText(path, Encoding.UTF8);
-                config = Newtonsoft.Json.JsonConvert.DeserializeObject<CameraConfig>(jsonStr);
 
-                if (config.Cameras==null&& config.Cameras.Count==0)
-                {
-                    config.Cameras = new System.Collections.ObjectModel.ObservableCollection<CameraSetting>();
-                }
+                    #region 物理坐标
 
-                CameraSetting cameraSettingNew = new CameraSetting();
-                cameraSettingNew.IsAvailable = false;
-                cameraSettingNew.Name= Name;
-                cameraSettingNew.SerialNumber= SerialNumber;
-                //物理坐标默认值
-                switch (uuid)
-                {
-                    case 0:
-                        cameraSettingNew.ThreeMachineCalibration = location0XYZs;
-                        break;
-                    case 1:
-                        cameraSettingNew.ThreeMachineCalibration = location90XYZs;
-                        break;
-                    case 2:
-                        cameraSettingNew.ThreeMachineCalibration = location180XYZs;
-                        break;
-                    default:
-                        break;
-                }
-                config.Cameras.Add(cameraSettingNew);
-                config.CurrentCamera= cameraSettingNew;
+                    CalibrationSettings calibrationSettings = new CalibrationSettings();
+                    if (!System.IO.File.Exists(Calibrationpath))
+                    {
+                        FileStream fs = File.Create(Calibrationpath);//创建文件
+                        fs.Close();
+                    }
+                    string jsonCalibrationStr = File.ReadAllText(Calibrationpath, Encoding.UTF8);
+                    calibrationSettings = Newtonsoft.Json.JsonConvert.DeserializeObject<CalibrationSettings>(jsonCalibrationStr);
+                    if (calibrationSettings == null)
+                    {
+                        calibrationSettings = new CalibrationSettings();
+                    }
+                    if (calibrationSettings.CamerasCali == null && calibrationSettings.CamerasCali.Count == 0)
+                    {
+                        calibrationSettings.CamerasCali = new System.Collections.ObjectModel.ObservableCollection<CameraCalibrationSetting>();
+                    }
+                    calibrationSettings.physicalCoordinateCalibrationSetting = new System.Collections.ObjectModel.ObservableCollection<PhysicalCoordinateCalibrationSetting>();
 
-                string configString = Newtonsoft.Json.JsonConvert.SerializeObject(config);
+                    //var CameraCalirationSel = calibrationSettings.CamerasCali.Where(o => o.Name == Name && o.SerialNumber == SerialNumber).FirstOrDefault();
+                    //if (CameraCalirationSel != null)
+                    //{
+                    //    calibrationSettings.CurrentCamera = CameraCalirationSel;
+                    //}
+                    //else
+                    //{
+                    //    CameraCalibrationSetting cameraCalibrationSetting = new CameraCalibrationSetting();
+                    //    cameraCalibrationSetting.Name = Name;
+                    //    cameraCalibrationSetting.SerialNumber = SerialNumber;
+                    //    calibrationSettings.CamerasCali.Add(cameraCalibrationSetting);
+                    //    calibrationSettings.CurrentCamera = cameraCalibrationSetting;
+                    //    calibrationSettings.physicalCoordinateCalibrationSetting = new System.Collections.ObjectModel.ObservableCollection<PhysicalCoordinateCalibrationSetting>();
 
-                File.WriteAllLines(path, new string[] { configString }, Encoding.UTF8);
+                    //    PhysicalCoordinateCalibrationSetting py = new PhysicalCoordinateCalibrationSetting();
+                    //    py.Coordinate = 50;
+                    //    py.ThreeMachineCalibration = new List<List<LocationXYZ>>();
+                    //    py.ThreeMachineCalibration.Add(location0XYZs);
+                    //    py.ThreeMachineCalibration.Add(location90XYZs);
+                    //    py.ThreeMachineCalibration.Add(location180XYZs);
 
+                    //    calibrationSettings.physicalCoordinateCalibrationSetting.Add(py);
+
+                    //    PhysicalCoordinateCalibrationSetting py1 = new PhysicalCoordinateCalibrationSetting();
+                    //    py1.Coordinate = 100;
+                    //    py1.ThreeMachineCalibration = new List<List<LocationXYZ>>();
+                    //    py1.ThreeMachineCalibration.Add(location0XYZs);
+                    //    py1.ThreeMachineCalibration.Add(location90XYZs);
+                    //    py1.ThreeMachineCalibration.Add(location180XYZs);
+
+                    //    calibrationSettings.physicalCoordinateCalibrationSetting.Add(py);
+
+                    //    //switch (uuid)
+                    //    //{
+                    //    //    case 0:
+                    //    //        cameraCalibrationSetting.ThreeMachineCalibration = location0XYZs;
+                    //    //        break;
+                    //    //    case 1:
+                    //    //        cameraCalibrationSetting.ThreeMachineCalibration = location90XYZs;
+                    //    //        break;
+                    //    //    case 2:
+                    //    //        cameraCalibrationSetting.ThreeMachineCalibration = location180XYZs;
+                    //    //        break;
+                    //    //    default:
+                    //    //        break;
+                    //    //}
+                    //}
+
+
+
+
+                    string configString = Newtonsoft.Json.JsonConvert.SerializeObject(calibrationSettings);
+
+                    File.WriteAllLines(Calibrationpath, new string[] { configString }, Encoding.UTF8);
+                    #endregion
+
+                    return 1;
+
+                });
             }
             catch (Exception ex)
             {

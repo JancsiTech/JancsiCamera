@@ -26,7 +26,7 @@ namespace JancsiVisionCameraServers.Model
         public string SerialNumber;
 
         //GPU加速显卡名称 例： [0] NVIDIA GeForce RTX 3090"; // Change this to "[0] GeForce GTX 1080" for example.
-        public string cudaDeviceString = null;
+        public string cudaDeviceString = "";
 
         /// <summary>
         /// 相机名称-同系列产品可能相同 # not null
@@ -78,12 +78,6 @@ namespace JancsiVisionCameraServers.Model
         /// <summary>
         /// 相机物理坐标
         /// </summary>
-        public List<LocationXYZ> _ThreeMachineCalibration { get; set; }
-        //Matrix affineMatrix; // persist on disk read from disk at loading time
-        /// <summary>
-        /// 相机物理坐标
-        /// </summary>
-        public RTTwoDimensionalMatrix _CameraAffineMatrixl { get; set; }
 
     }
     public class Capture
@@ -122,7 +116,7 @@ namespace JancsiVisionCameraServers.Model
         [Newtonsoft.Json.JsonIgnore]
         public int MaxExposureLevel { get { return 50000; } }
 
-      
+
     }
     public enum Compression
     {

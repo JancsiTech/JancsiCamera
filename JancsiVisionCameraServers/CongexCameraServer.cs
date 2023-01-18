@@ -81,14 +81,16 @@ namespace JancsiVisionCameraServers
         /// <returns></returns>
         public Dictionary<Dto_CameraOperation, List<Point3D>> connect()
         {
-            //_config.GetCameraConfig(_CameraOperation.SerialNumber);
+            // _config.GetCameraConfig(_CameraOperation.SerialNumber);
             _CloudData = new List<Point3D>();
 
             try
             {
 
                 // this._log.LogInfo(string.Format("log:当前线程id{0}，is{1}", Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread.IsThreadPoolThread));
-                if (_CameraOperation.IsAvailable && isReady())
+                //K  if (_CameraOperation.IsAvailable && isReady())
+                if (_CameraOperation.IsAvailable)
+
                 {
 
                     // Start continuous acquisition.
@@ -119,11 +121,10 @@ namespace JancsiVisionCameraServers
                                 _CloudData.Clear();
                                 for (int i = 0; i < copyList.Count; i++)
                                 {
-                                    if (i % 5 == 0)
-                                    {
-
-                                        _CloudData.Add(copyList[i]);
-                                    }
+                                    //if (i % 5 == 0)
+                                    //{
+                                    _CloudData.Add(copyList[i]);
+                                    //}
                                 }
                                 //if (rangeImageList.Count == 10)
                                 //{
@@ -401,7 +402,7 @@ namespace JancsiVisionCameraServers
         // Multiple AcqFifo objects can exist for a single FrameGrabber. Each AcqFifo owns a set of parameters that are
         // guaranteed to be applied to the hardware when acquisitions are done using that instance. This function defines
         // what these parameters are.
-        public bool setCameraConfig()
+        public bool setCameraConfig(JancsiVisionConfigServices.Model.CameraConfig cameraConfig)
         {
             bool Setted = false;
             try
@@ -409,7 +410,7 @@ namespace JancsiVisionCameraServers
                 //if there are configs
                 if (_config != null)
                 {
-                    JancsiVisionConfigServices.Model.CameraConfig cameraConfig = _config.GetEnvironmentConfig("camera");
+
                     if (cameraConfig != null && cameraConfig.Cameras.Count > 0)
                     {
                         CameraSetting ChoseCameraSetting = cameraConfig.Cameras.Where(o => o.Name == _CameraOperation.Name && o.SerialNumber == _CameraOperation.SerialNumber).FirstOrDefault();
@@ -441,21 +442,10 @@ namespace JancsiVisionCameraServers
                             _CameraOperation.RegionExtract.LimitationXMin = ChoseCameraSetting.RegionExtract.LimitationXMin;
                             _CameraOperation.RegionExtract.LimitationYMin = ChoseCameraSetting.RegionExtract.LimitationYMin;
                             _CameraOperation.RegionExtract.LimitationZMin = ChoseCameraSetting.RegionExtract.LimitationZMin;
-                            _CameraOperation._ThreeMachineCalibration = ChoseCameraSetting.ThreeMachineCalibration;
-                            //增加读取相机对应物理坐标信息
-                            _CameraOperation._CameraAffineMatrixl = ChoseCameraSetting.CameraAffineMatrixl;
+
                             #endregion
 
                         }
-                        else
-                        {
-                            _config.SaveConfig(_CameraOperation.Name, _CameraOperation.SerialNumber, _CameraOperation.uuid);
-                        }
-                    }
-                    else
-                    {
-                        //配置文件不存在或者不存在相关相机配置
-                        _config.SaveConfig(_CameraOperation.Name, _CameraOperation.SerialNumber, _CameraOperation.uuid);
                     }
                 }
 
@@ -469,7 +459,7 @@ namespace JancsiVisionCameraServers
                 //
                 // By default the cudaDeviceString is null. To select a device different from the default run this
                 // example once and choose one of the displayed valid options for the cuda_device string property.
-                string cudaDeviceString = _CameraOperation.cudaDeviceString;//"[0] NVIDIA GeForce RTX 3090"; // Change this to "[0] GeForce GTX 1080" for example.
+                string cudaDeviceString = "[0] NVIDIA GeForce RTX 3090";//_CameraOperation.cudaDeviceString;//"[0] NVIDIA GeForce RTX 3090"; // Change this to "[0] GeForce GTX 1080" for example.
                 if (cudaDeviceString != null)
                 {
                     Console.WriteLine("Using non-default cuda device: " + cudaDeviceString);
@@ -515,7 +505,7 @@ namespace JancsiVisionCameraServers
                         // As a result, the images width and height are halved.
                         // In this mode, the region of interest is ignored and the full region of interest is used
                         // The default value is false.
-                        case "binning": propertyValue = "True"; break;
+                        //case "binning": propertyValue = "false"; break;
 
                         // Compression is an alternative to HDR. It has less impact on acquisition time, but the results are not as precise.
                         // The effect of compression is a modified light intensity response of the cameras.

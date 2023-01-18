@@ -48,3 +48,4 @@ C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\testCameraSDK\obj\Debug\t
 C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\testCameraSDK\bin\Debug\JancsiVisionUtilityServers.dll
 C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\testCameraSDK\bin\Debug\JancsiVisionUtilityServers.pdb
 C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\testCameraSDK\bin\Debug\Newtonsoft.Json.dll
+C:\Jancsitech\project\JancsitechCameraSDK\JancsiCamera\testCameraSDK\bin\Debug\PclSharp.dll

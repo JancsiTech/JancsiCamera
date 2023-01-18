@@ -59,5 +59,13 @@ namespace JancsiVisionCameraController
         {
             cameraControl.disconnectAll();
         }
+
+        /// <summary>
+        /// 重启相机链接
+        /// </summary>
+        public void resetCamera()
+        {
+            cameraControl.reset();
+        }
     }
 }

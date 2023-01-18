@@ -23,6 +23,7 @@
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Users\\EvanQ\\Desktop": {},
+          "http://nexus.corp.jancsitech.net:8081/repository/nuget-hosted/": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

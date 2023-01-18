@@ -30,6 +30,7 @@ namespace JancsiVisionConfigServices.Model
     {
         string _Name;
         string _SerialNumber;
+        int _CameraId;
         Capture _Capture;
         ROI _ROI;
         ReconstructionQuality _ReconstructionQuality;
@@ -37,8 +38,7 @@ namespace JancsiVisionConfigServices.Model
         PostFiler _PostFilter;
         RegionExtract _RegionExtract;
         bool _IsAvailable;
-        List<LocationXYZ> _ThreeMachineCalibration;
-        RTTwoDimensionalMatrix _CameraAffineMatrixl;
+
         public CameraSetting()
         {
             Capture = new Capture();
@@ -48,14 +48,14 @@ namespace JancsiVisionConfigServices.Model
             PostFilter = new PostFiler();
             RegionExtract = new RegionExtract();
             IsAvailable = false;
-            _ThreeMachineCalibration = new List<LocationXYZ>();
-            _CameraAffineMatrixl = new RTTwoDimensionalMatrix();
+
 
         }
         [Newtonsoft.Json.JsonIgnore]
         public bool IsAvailable { get { return _IsAvailable; } set { _IsAvailable = value; } }
         public string Name { get { return _Name; } set { _Name = value; } }
         public string SerialNumber { get { return _SerialNumber; } set { _SerialNumber = value; } }
+        public int CameraId { get { return _CameraId; } set { _CameraId = value; } }
         public Capture Capture { get { return _Capture; } set { _Capture = value; } }
         public ROI ROI { get { return _ROI; } set { _ROI = value; } }
         public ReconstructionQuality ReconstructionQuality { get { return _ReconstructionQuality; } set { _ReconstructionQuality = value; } }
@@ -63,9 +63,6 @@ namespace JancsiVisionConfigServices.Model
         public PostFiler PostFilter { get { return _PostFilter; } set { _PostFilter = value; } }
         public RegionExtract RegionExtract { get { return _RegionExtract; } set { _RegionExtract = value; } }
 
-        public List<LocationXYZ> ThreeMachineCalibration { get { return _ThreeMachineCalibration; } set { _ThreeMachineCalibration = value; } }
-
-        public RTTwoDimensionalMatrix CameraAffineMatrixl { get { return _CameraAffineMatrixl; } set { _CameraAffineMatrixl = value; } }
 
 
 
@@ -142,7 +139,7 @@ namespace JancsiVisionConfigServices.Model
     }
     public enum OutlierFilter
     {
-        Disable,
+        Disabled,
         Permissive,
         Balanced,
         Strict
@@ -189,20 +186,5 @@ namespace JancsiVisionConfigServices.Model
 
     }
 
-    public class LocationXYZ
-    {
 
-        double _X, _Y, _Z;
-        public double X { get { return _X; } set { _X = value; } }
-        public double Y { get { return _Y; } set { _Y = value; } }
-        public double Z { get { return _Z; } set { _Z = value; } }
-
-    }
-    public class RTTwoDimensionalMatrix
-    {
-
-        List<List<double>> _Matrix;
-        public List<List<double>> Matrix { get { return _Matrix; } set { _Matrix = value; } }
-
-    }
 }

@@ -1,11 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "Fn2VJYrbfHClc+5oCxo1eFFIIkhchXcG7CpppExDphlWPVvMAO+F/X0wI/kCps/65XQAoTCLvALtbQ5Pi7V06Q==",
+  "dgSpecHash": "sEJA5zZlSxAXN9Y7e1sxsqm9dQcPIsBVr5vDo9xUuG7ff4F1RoZBj/zC9ImW7tu0dklXZFwfYHPA6jA9MRk6+g==",
   "success": true,
   "projectFilePath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVisionPointCloudServers\\JancsiVisionPointCloudServers.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\EvanQ\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\EvanQ\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1803",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://nexus.corp.jancsitech.net:8081/repository/nuget-hosted/'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
+    }
+  ]
 }

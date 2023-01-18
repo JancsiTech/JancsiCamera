@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "N5+ty+VRHFHZozdWVryzzBwZAfzSr59yBwLS5cO6W4ChGqHuL3bFzZ2kSa/z2mknoN6nz4qDXCAE53GhHReJ0Q==",
+  "dgSpecHash": "G9LCsefj/1TGPKK2/XiAXwLHeO0pZ+fMonjCdpzzsDb6x8M1YtgKMmSLTkKAzUFOOHuK1Lk00eVkOKE6DYcMBQ==",
   "success": true,
   "projectFilePath": "C:\\Jancsitech\\project\\JancsitechCameraSDK\\JancsiCamera\\JancsiVersionCameraController\\JancsiVisionCameraController.csproj",
   "expectedPackageFiles": [
@@ -17,6 +17,12 @@
     "C:\\Users\\EvanQ\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "NU1803",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "You are running the 'restore' operation with an 'HTTP' source, 'http://nexus.corp.jancsitech.net:8081/repository/nuget-hosted/'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source."
+    },
     {
       "code": "NU1701",
       "level": "Warning",

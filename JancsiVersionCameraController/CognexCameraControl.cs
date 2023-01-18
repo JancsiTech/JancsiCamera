@@ -25,7 +25,7 @@ namespace JancsiVersionCameraController
     {
         private readonly ILogProvider _log;
         private readonly IConfigService _config;
-
+        JancsiVisionConfigServices.Model.CameraConfig cameraConfig { get; set; }
         /// <summary>
         /// 错误信息
         /// </summary>
@@ -123,7 +123,7 @@ namespace JancsiVersionCameraController
             {
                 //会直接抛出 AggregateException 异常
                 //throw;
-                //log ex
+                _ErrorMessage = ex.ToString();
                 return null;
             }
         }
@@ -138,7 +138,7 @@ namespace JancsiVersionCameraController
         {
             try
             {
-                JancsiVisionConfigServices.Model.CameraConfig cameraConfig = _config.GetEnvironmentConfig("camera");
+                cameraConfig = _config.GetEnvironmentConfig("camera");
                 cameras = new List<CongexCameraServer>();
                 _ErrorMessage = "";
 
@@ -149,7 +149,7 @@ namespace JancsiVersionCameraController
                 CogFrameGrabberImagingDevices frameGrabbers = new CogFrameGrabberImagingDevices();
                 if (frameGrabbers.Count < 1)
                 {
-                    _ErrorMessage = "没有找到相机设备！";
+                    _ErrorMessage = "Was not able to find suitable device！";
                     Console.WriteLine("Was not able to find suitable device.");
                     Console.WriteLine("Finished. Press any key to close this window...");
                     Console.ReadKey();
@@ -162,7 +162,7 @@ namespace JancsiVersionCameraController
                 foreach (ICogFrameGrabber foundFrameGrabber in frameGrabbers)
                 {
 
-                    Console.WriteLine("Found frame grabber " + foundFrameGrabber.Name + foundFrameGrabber.SerialNumber);
+                    //Console.WriteLine("Found frame grabber " + foundFrameGrabber.Name + foundFrameGrabber.SerialNumber);
                     if (foundFrameGrabber.Name == "Device: Lion" || foundFrameGrabber.Name.Contains("Device: 3D-A"))
                     {
 
@@ -216,7 +216,7 @@ namespace JancsiVersionCameraController
                         // Create an AcqFifo.
                         // congexCamera._MainCogFifo = foundFrameGrabber.CreateAcqFifo(foundFrameGrabber.AvailableVideoFormats[0], CogAcqFifoPixelFormatConstants.Format16Grey, 0, true);
 
-                        congexCamera.setCameraConfig();
+                        congexCamera.setCameraConfig(cameraConfig);
 
                         cameras.Add(congexCamera);
 
@@ -226,7 +226,7 @@ namespace JancsiVersionCameraController
                     }
                     else
                     {
-                        _ErrorMessage = "不是康耐视相机！";
+                        _ErrorMessage = "Not a spec camera model！";
                         //log not cognex
                         return;
                     }
@@ -307,7 +307,7 @@ namespace JancsiVersionCameraController
                             //Recreate acq fifo.
                             //acqFifo = _MainCogCrabber.CreateAcqFifo(frameGrabber.AvailableVideoFormats[0], CogAcqFifoPixelFormatConstants.Format16Grey, 0, true);
                             // Configuration needs to be reapplied.
-                            device.setCameraConfig();
+                            device.setCameraConfig(cameraConfig);
 
 
                         }
@@ -383,7 +383,7 @@ namespace JancsiVersionCameraController
         public List<Dto_RotateMatrix> InitMatrixByCamera()
         {
 
-           
+
 
             // dto_RotateMatrix.dto_PointCloud.point3Ds[0]
 
